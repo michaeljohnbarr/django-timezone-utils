@@ -7,7 +7,10 @@ from datetime import datetime, tzinfo, time as datetime_time
 import pytz
 
 # Django
-from django.core import checks
+try:
+    from django.core import checks
+except ImportError:
+    pass
 from django.core.exceptions import ValidationError
 from django.db.models import SubfieldBase
 from django.db.models.fields import DateTimeField, CharField
@@ -51,7 +54,7 @@ class TimeZoneField(with_metaclass(SubfieldBase, CharField)):
     def to_python(self, value):
         value = super(TimeZoneField, self).to_python(value)
 
-        if value in self.empty_values:
+        if not value:
             return value
 
         try:
@@ -71,13 +74,13 @@ class TimeZoneField(with_metaclass(SubfieldBase, CharField)):
     # --------------------------------------------------------------------------
     # Django >= 1.7 Checks Framework
     # --------------------------------------------------------------------------
-    def check(self, **kwargs):
+    def check(self, **kwargs):  # pragma: no cover
         errors = super(TimeZoneField, self).check(**kwargs)
         errors.extend(self._check_timezone_max_length_attribute(**kwargs))
         errors.extend(self._check_choices_attribute(**kwargs))
         return errors
 
-    def _check_timezone_max_length_attribute(self, **kwargs):
+    def _check_timezone_max_length_attribute(self, **kwargs): # pragma: no cover
         """Custom check() method that verifies that the `max_length` attribute
         covers all possible pytz timezone lengths.
 
@@ -236,7 +239,7 @@ class LinkedTZDateTimeField(with_metaclass(SubfieldBase, DateTimeField)):
 
         return value
 
-    def deconstruct(self):
+    def deconstruct(self):  # pragma: no cover
         name, path, args, kwargs = super(
             LinkedTZDateTimeField,
             self

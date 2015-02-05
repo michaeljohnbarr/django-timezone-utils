@@ -24,7 +24,7 @@ class TimeZoneField(CharField):
     def to_python(self, value):
         value = super(TimeZoneField, self).to_python(value)
 
-        if value in self.empty_values:
+        if not value:
             return value
 
         try:

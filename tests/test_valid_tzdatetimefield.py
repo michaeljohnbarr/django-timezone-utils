@@ -3,7 +3,9 @@
 # ==============================================================================
 # Python
 from datetime import datetime
+
 import pytz
+
 
 # Django
 from django.conf import settings
@@ -12,8 +14,8 @@ from django.utils.timezone import make_aware
 
 
 # App
-from .models.timezonefield.valid import TZWithGoodStringDefault
-from .models.tzawaredatetimefield.valid import (ModelWithDateTimeOnly,
+from tests.models import TZWithGoodStringDefault
+from .models import (ModelWithDateTimeOnly,
                                                 CallableTimeStampedModel,
                                                 StaticTimeStampedModel,
                                                 ModelWithForeignKeyToTimeZone,

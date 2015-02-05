@@ -9,7 +9,7 @@ from django.core.exceptions import ValidationError
 from django.test import TestCase
 
 # App
-from .models.timezonefield.invalid import (TZWithBadStringDefault,
+from tests.models import (TZWithBadStringDefault,
                                            TZWithLowMaxLength)
 
 

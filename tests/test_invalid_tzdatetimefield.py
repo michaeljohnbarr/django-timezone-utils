@@ -9,7 +9,7 @@ from django.core.exceptions import ValidationError
 from django.test import TestCase
 
 # App
-from .models.tzawaredatetimefield.invalid import (ModelWithBadPopulateFrom,
+from tests.models import (ModelWithBadPopulateFrom,
                                                   ModelWithBadTimeOverride,
                                                   ModelWithBadTimeZoneCharField)
 
