@@ -6,7 +6,7 @@ Django Timezone Utils: Time Zone Utilities For Models
     :alt: Test Status
 
 .. image:: https://landscape.io/github/michaeljohnbarr/django-timezone-utils/master/landscape.png
-    :target: https://landscape.io/github/michaelbarr/django-timezone-utils/master
+    :target: https://landscape.io/github/michaeljohnbarr/django-timezone-utils
     :alt: Code Health
     
 .. image:: https://coveralls.io/repos/michaeljohnbarr/django-timezone-utils/badge.svg
