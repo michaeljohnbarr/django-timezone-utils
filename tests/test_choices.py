@@ -21,13 +21,13 @@ class TimeZoneChoicesTestCase(TestCase):
     def test_TIMEZONE_OFFSET_REGEX(self):
         now = datetime.now(pytz.timezone('US/Eastern'))
         self.assertRegexpMatches(str(now.strftime('%z')), TIMEZONE_OFFSET_REGEX)
-        self.assertNotRegexpMatches(
-            '-' + str(now.strftime('%z')),
-            TIMEZONE_OFFSET_REGEX
+        self.assertEqual(
+            TIMEZONE_OFFSET_REGEX.match('-' + str(now.strftime('%z'))),
+            None
         )
-        self.assertNotRegexpMatches(
-            str(now.strftime('%z') + '1'),
-            TIMEZONE_OFFSET_REGEX
+        self.assertEqual(
+            TIMEZONE_OFFSET_REGEX.match(str(now.strftime('%z') + '1')),
+            None
         )
 
     def test_ALL_TIMEZONES_CHOICES_length(self):

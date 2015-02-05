@@ -1,2 +1,1 @@
-from invalid import *
-from valid import *
+__author__ = 'michaelbarr'
