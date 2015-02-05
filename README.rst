@@ -2,7 +2,7 @@ Django Timezone Utils: Time Zone Utilities For Models
 =====================================================
 
 .. image:: https://travis-ci.org/michaeljohnbarr/django-timezone-utils.png?branch=master
-    :target: https://travis-ci.org/michaelbarr/django-timezone-utils
+    :target: https://travis-ci.org/michaeljohnbarr/django-timezone-utils
     :alt: Test Status
 
 .. image:: https://landscape.io/github/michaeljohnbarr/django-timezone-utils/master/landscape.png
