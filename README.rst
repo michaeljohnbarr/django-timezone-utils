@@ -1,6 +1,10 @@
 Django Timezone Utils: Time Zone Utilities For Models
 =====================================================
 
+.. image:: https://pypip.in/version/django-timezone-utils/badge.svg?style=flat&text=version
+    :target: https://pypi.python.org/pypi/django-timezone-utils/
+    :alt: Latest Version
+
 .. image:: https://travis-ci.org/michaeljohnbarr/django-timezone-utils.png?branch=master
     :target: https://travis-ci.org/michaeljohnbarr/django-timezone-utils
     :alt: Test Status
@@ -13,11 +17,21 @@ Django Timezone Utils: Time Zone Utilities For Models
     :target: https://coveralls.io/r/michaeljohnbarr/django-timezone-utils
     :alt: Coverage Status
     
-.. image:: https://pypip.in/version/django-timezone-utils/badge.svg
+.. image:: https://pypip.in/py_versions/django-timezone-utils/badge.svg?style=flat
     :target: https://pypi.python.org/pypi/django-timezone-utils/
-    :alt: Latest Version
+    :alt: Supported Python versions
+    
+.. image:: https://pypip.in/license/django-timezone-utils/badge.svg?style=flat
+    :target: https://pypi.python.org/pypi/django-timezone-utils/
+    :alt: License
+    
+.. image:: https://pypip.in/status/django-timezone-utils/badge.svg?style=flat
+    :target: https://pypi.python.org/pypi/django-timezone-utils/
+    :alt: Development Status
+    
 
-*django-timezone-utils* adds automatic time zone conversions and support
+
+**django-timezone-utils** adds automatic time zone conversions and support
 utilities to Django.
 
 Please note that this project is currently marked as a development status of
