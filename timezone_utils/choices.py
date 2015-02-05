@@ -6,9 +6,6 @@ from datetime import datetime
 import pytz
 import re
 
-# Django
-from django.utils.six.moves import range
-
 __all__ = ('get_choices', 'ALL_TIMEZONES_CHOICES', 'COMMON_TIMEZONES_CHOICES',
            'PRETTY_ALL_TIMEZONES_CHOICES', 'PRETTY_COMMON_TIMEZONES_CHOICES')
 

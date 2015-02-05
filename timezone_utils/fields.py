@@ -14,7 +14,7 @@ except ImportError:
 from django.core.exceptions import ValidationError
 from django.db.models import SubfieldBase
 from django.db.models.fields import DateTimeField, CharField
-from django.utils.six import callable, with_metaclass
+from django.utils.six import with_metaclass
 from django.utils.timezone import get_default_timezone
 from django.utils.translation import ugettext_lazy as _
 
@@ -76,11 +76,11 @@ class TimeZoneField(with_metaclass(SubfieldBase, CharField)):
     # --------------------------------------------------------------------------
     def check(self, **kwargs):  # pragma: no cover
         errors = super(TimeZoneField, self).check(**kwargs)
-        errors.extend(self._check_timezone_max_length_attribute(**kwargs))
-        errors.extend(self._check_choices_attribute(**kwargs))
+        errors.extend(self._check_timezone_max_length_attribute())
+        errors.extend(self._check_choices_attribute())
         return errors
 
-    def _check_timezone_max_length_attribute(self, **kwargs): # pragma: no cover
+    def _check_timezone_max_length_attribute(self):     # pragma: no cover
         """Custom check() method that verifies that the `max_length` attribute
         covers all possible pytz timezone lengths.
 
@@ -113,7 +113,7 @@ class TimeZoneField(with_metaclass(SubfieldBase, CharField)):
         # When no error, return an empty list
         return []
 
-    def _check_choices_attribute(self, **kwargs):   # pragma: no cover
+    def _check_choices_attribute(self):   # pragma: no cover
         if self.choices:
             warning_params = {
                 'msg': (
@@ -129,7 +129,7 @@ class TimeZoneField(with_metaclass(SubfieldBase, CharField)):
                 if isinstance(option_value, (list, tuple)):
                     # This is an optgroup, so look inside the group for
                     # options.
-                    for optgroup_key, optgroup_value in option_value:
+                    for optgroup_key in map(lambda x: x[0], option_value):
                         if optgroup_key not in pytz.all_timezones:
                             # Make sure we don't raise this error on empty
                             #   values
@@ -191,7 +191,7 @@ class LinkedTZDateTimeField(with_metaclass(SubfieldBase, DateTimeField)):
         tz = get_default_timezone()
 
         if self.populate_from:
-            if callable(self.populate_from):
+            if hasattr(self.populate_from, '__call__'):
                 # LinkedTZDateTimeField(
                 #     populate_from=lambda instance: instance.field.timezone
                 # )
@@ -210,7 +210,10 @@ class LinkedTZDateTimeField(with_metaclass(SubfieldBase, DateTimeField)):
             datetime_as_timezone = value.astimezone(tz)
             value = tz.normalize(
                 tz.localize(
-                    datetime.combine(date=datetime_as_timezone.date(), time=datetime_as_timezone.time())
+                    datetime.combine(
+                        date=datetime_as_timezone.date(),
+                        time=datetime_as_timezone.time()
+                    )
                 )
             )
 
