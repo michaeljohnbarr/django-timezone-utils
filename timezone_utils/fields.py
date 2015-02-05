@@ -19,7 +19,7 @@ from django.utils.timezone import get_default_timezone
 from django.utils.translation import ugettext_lazy as _
 
 # App
-import forms
+from timezone_utils import forms
 
 __all__ = ('TimeZoneField', 'LinkedTZDateTimeField')
 

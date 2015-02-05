@@ -12,9 +12,17 @@ from django.conf import settings
 from django.core.management import execute_from_command_line
 from django.utils import timezone
 
+INSTALLED_APPS = [
+    'django.contrib.contenttypes',
+    'django.contrib.auth',
+    'timezone_utils',
+    'tests',
+]
+
 if not settings.configured:
     test_runners_args = {}
     if VERSION < (1, 6):    # pragma: no cover
+        INSTALLED_APPS.append('discover_runner')
         test_runners_args = {
             'TEST_RUNNER': 'discover_runner.DiscoverRunner',
         }
@@ -25,13 +33,7 @@ if not settings.configured:
                 'NAME': ':memory:',
             },
         },
-        INSTALLED_APPS=(
-            'django.contrib.contenttypes',
-            'django.contrib.auth',
-            'discover_runner',
-            'timezone_utils',
-            'tests',
-        ),
+        INSTALLED_APPS=tuple(INSTALLED_APPS),
         MIDDLEWARE_CLASSES = (
             'django.middleware.common.CommonMiddleware',
             'django.middleware.csrf.CsrfViewMiddleware',
