@@ -16,26 +16,26 @@ Django Timezone Utils: Time Zone Utilities For Models
 .. image:: https://landscape.io/github/michaeljohnbarr/django-timezone-utils/master/landscape.png
     :target: https://landscape.io/github/michaeljohnbarr/django-timezone-utils
     :alt: Code Health
-    
+
 .. image:: https://pypip.in/py_versions/django-timezone-utils/badge.svg?style=flat
     :target: https://pypi.python.org/pypi/django-timezone-utils/
     :alt: Supported Python versions
-    
+
 .. image:: https://pypip.in/license/django-timezone-utils/badge.svg?style=flat
     :target: https://pypi.python.org/pypi/django-timezone-utils/
     :alt: License
-    
+
 .. image:: https://pypip.in/status/django-timezone-utils/badge.svg?style=flat
     :target: https://pypi.python.org/pypi/django-timezone-utils/
     :alt: Development Status
-    
+
 
 
 **django-timezone-utils** adds automatic time zone conversions and support
 utilities to Django.
 
 Please note that this project is currently marked as a development status of
-*Alpha*. Suggestions, constructive criticism, and feedback are certainly
+*Beta*. Suggestions, constructive criticism, and feedback are certainly
 welcomed and appreciated.
 
 Installation
@@ -144,7 +144,7 @@ the database:
 
     # LocationReportingPeriod.start
     datetime.datetime(2015, 1, 1, 0, 0, tzinfo=<DstTzInfo 'US/Eastern' EST-1 day, 19:00:00 STD>)
-    
+
     # LocationReportingPeriod.end
     datetime.datetime(2015, 1, 1, 23, 59, 59, 999999, tzinfo=<DstTzInfo 'US/Eastern' EST-1 day, 19:00:00 STD>)
 
@@ -156,10 +156,10 @@ database. For example, if your application's settings.TIME_ZONE is set to
 ``UTC``, you would get back:
 
 .. code-block:: python
-    
+
     print(period.start)
     datetime.datetime(2015, 1, 1, 5, 0, tzinfo=<UTC>)
-    
+
     print(period.end)
     datetime.datetime(2015, 1, 2, 4, 59, 59, 999999, tzinfo=<UTC>)
 
