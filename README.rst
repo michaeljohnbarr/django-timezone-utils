@@ -2,11 +2,11 @@ Django Timezone Utils: Time Zone Utilities For Models
 =====================================================
 
 .. image:: https://travis-ci.org/michaeljohnbarr/django-timezone-utils.png?branch=master
-    :target: https://travis-ci.org/henriquebastos/django-timezone-utils
+    :target: https://travis-ci.org/michaelbarr/django-timezone-utils
     :alt: Test Status
 
 .. image:: https://landscape.io/github/michaeljohnbarr/django-timezone-utils/master/landscape.png
-    :target: https://landscape.io/github/henriquebastos/django-aggregate-if/master
+    :target: https://landscape.io/github/michaelbarr/django-timezone-utils/master
     :alt: Code Health
 
 *django-timezone-utils* adds automatic time zone conversions and support
