@@ -17,12 +17,18 @@ if not settings.configured:
     if VERSION < (1, 6):    # pragma: no cover
         test_runners_args = {
             'TEST_RUNNER': 'discover_runner.DiscoverRunner',
+            'INSTALLED_APPS': (
+                'django.contrib.contenttypes',
+                'django.contrib.auth',
+                'timezone_utils',
+                'tests',
+            )
         }
     settings.configure(
         DATABASES={
             'default': {
                 'ENGINE': 'django.db.backends.sqlite3',
-                'NAME': ':memory:',
+                # 'NAME': ':memory:',
             },
         },
         INSTALLED_APPS=(
