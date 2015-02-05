@@ -139,8 +139,14 @@ US/Eastern time zone.
 
 So assuming the date was 2015-01-01, we would be saving the following values to
 the database:
-``LocationReportingPeriod.start``: ``datetime.datetime(2015, 1, 1, 0, 0, tzinfo=<DstTzInfo 'US/Eastern' EST-1 day, 19:00:00 STD>)``
-``LocationReportingPeriod.end``: ``datetime.datetime(2015, 1, 1, 23, 59, 59, 999999, tzinfo=<DstTzInfo 'US/Eastern' EST-1 day, 19:00:00 STD>)``
+
+.. code-block:: python
+
+    # LocationReportingPeriod.start
+    datetime.datetime(2015, 1, 1, 0, 0, tzinfo=<DstTzInfo 'US/Eastern' EST-1 day, 19:00:00 STD>)
+    
+    # LocationReportingPeriod.end
+    datetime.datetime(2015, 1, 1, 23, 59, 59, 999999, tzinfo=<DstTzInfo 'US/Eastern' EST-1 day, 19:00:00 STD>)
 
 For each location, let's say that the client wants to see the start and end of
 the reporting period in that location's time zone. One thing to remember is that
@@ -149,11 +155,11 @@ particular time zone, it does not mean that they will come that way from the
 database. For example, if your application's settings.TIME_ZONE is set to
 ``UTC``, you would get back:
 
-.. code block:: python
-
+.. code-block:: python
+    
     print(period.start)
     datetime.datetime(2015, 1, 1, 5, 0, tzinfo=<UTC>)
-
+    
     print(period.end)
     datetime.datetime(2015, 1, 2, 4, 59, 59, 999999, tzinfo=<UTC>)
 
@@ -187,7 +193,7 @@ Here is how we would handle the displaying conversions from view to template:
 .. code-block:: django
 
     {% load tz %}
-    {% load i81n %}
+    {% load i18n %}
 
     {% block content %}
         <table>
