@@ -17,6 +17,7 @@ env:
 
 install:
   - travis_retry pip install $DJANGO
+  - travis_retry pip install pytz
   - travis_retry pip install coveralls
 
 script:
