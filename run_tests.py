@@ -20,6 +20,7 @@ if not settings.configured:
             'INSTALLED_APPS': (
                 'django.contrib.contenttypes',
                 'django.contrib.auth',
+                'discover_runner',
                 'timezone_utils',
                 'tests',
             )
@@ -28,7 +29,7 @@ if not settings.configured:
         DATABASES={
             'default': {
                 'ENGINE': 'django.db.backends.sqlite3',
-                # 'NAME': ':memory:',
+                'NAME': ':memory:',
             },
         },
         INSTALLED_APPS=(
