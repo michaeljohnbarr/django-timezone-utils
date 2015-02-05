@@ -8,7 +8,7 @@ Django Timezone Utils: Time Zone Utilities For Models
 .. image:: https://landscape.io/github/michaeljohnbarr/django-timezone-utils/master/landscape.png
     :target: https://landscape.io/github/michaeljohnbarr/django-timezone-utils
     :alt: Code Health
-    
+
 .. image:: https://coveralls.io/repos/michaeljohnbarr/django-timezone-utils/badge.svg
     :target: https://coveralls.io/r/michaeljohnbarr/django-timezone-utils
     :alt: Coverage Status
@@ -217,7 +217,8 @@ Contributors
 Changelog
 ---------
 
-
+- 0.2 Multiple bug fixes based on testing.
+- 0.1 Initial release.
 
 License
 =======
