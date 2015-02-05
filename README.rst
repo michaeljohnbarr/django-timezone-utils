@@ -8,6 +8,10 @@ Django Timezone Utils: Time Zone Utilities For Models
 .. image:: https://landscape.io/github/michaeljohnbarr/django-timezone-utils/master/landscape.png
     :target: https://landscape.io/github/michaelbarr/django-timezone-utils/master
     :alt: Code Health
+    
+.. image:: https://coveralls.io/repos/michaeljohnbarr/django-timezone-utils/badge.svg
+    :target: https://coveralls.io/r/michaeljohnbarr/django-timezone-utils
+    :alt: Coverage Status
 
 *django-timezone-utils* adds automatic time zone conversions and support
 utilities to Django.
