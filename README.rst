@@ -13,14 +13,15 @@ Django Timezone Utils: Time Zone Utilities For Models
 utilities to Django.
 
 Please note that this project is currently marked as a development status of
-*planning*. Feedback is certainly welcomed and appreciated.
+*Alpha*. Suggestions, constructive criticism, and feedback are certainly
+welcomed and appreciated.
 
 Installation
 ------------
 
 *django-timezone-utils* works with Django 1.4, 1.5, 1.6 and 1.7.
 
-To install it, simply (coming soon):
+To install it, simply:
 
 .. code-block:: bash
 
