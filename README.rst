@@ -149,10 +149,13 @@ particular time zone, it does not mean that they will come that way from the
 database. For example, if your application's settings.TIME_ZONE is set to
 ``UTC``, you would get back:
 
-``>>> print period.start``
-``datetime.datetime(2015, 1, 1, 5, 0, tzinfo=<UTC>)``
-``print period.end``
-``datetime.datetime(2015, 1, 2, 4, 59, 59, 999999, tzinfo=<UTC>)``
+.. code block:: python
+
+    print(period.start)
+    datetime.datetime(2015, 1, 1, 5, 0, tzinfo=<UTC>)
+
+    print(period.end)
+    datetime.datetime(2015, 1, 2, 4, 59, 59, 999999, tzinfo=<UTC>)
 
 Here is how we would handle the displaying conversions from view to template:
 
