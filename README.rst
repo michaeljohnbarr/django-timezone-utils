@@ -98,6 +98,15 @@ Imagine you have the models ``Location`` and ``LocationReportingPeriod``:
         )
 
 
+    def _get_reporting_period_timzone(obj):
+        """Called as `obj` being the LocationReportingPeriodInstance.
+        
+        Note:
+            populate_from=lambda: instance: instance.location.timezone is not valid.
+
+        """
+        return obj.location.timezone
+
     class LocationReportingPeriod(models.Model)
         location = models.ForeignKey(
             verbose_name=_('location'),
@@ -108,15 +117,15 @@ Imagine you have the models ``Location`` and ``LocationReportingPeriod``:
             verbose_name=_('start'),
             # populate_from can also be a string value, provided that the string value
             #   is a field on the same model
-            populate_from=lambda instance: instance.location.timezone,
+            populate_from=_get_reporting_period_timzone,
             # Time override must be a datetime.time instance
-            time_override=datetime.min.time,
+            time_override=datetime.min.time(),
         )
         end = LinkedTZDateTimeField(
             verbose_name=_('end'),
-            populate_from=lambda instance: instance.location.timezone,
+            populate_from=_get_reporting_period_timzone,
             # Time override must be a datetime.time instance
-            time_override=datetime.max.time,
+            time_override=datetime.max.time(),
         )
 
         created = LinkedTZDateTimeField(
@@ -244,10 +253,6 @@ Contributors
 Changelog
 ---------
 
+- 0.3 Code cleanup.
 - 0.2 Multiple bug fixes based on testing.
 - 0.1 Initial release.
-
-License
-=======
-
-The MIT License.
