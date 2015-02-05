@@ -33,6 +33,7 @@ To install it, simply:
 
 
 Then add ``timezone_utils`` to your ``settings.INSTALLED_APPS``:
+
 .. code-block:: python
 
     INSTALLED_APPS = (
