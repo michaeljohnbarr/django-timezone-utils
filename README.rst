@@ -9,13 +9,13 @@ Django Timezone Utils: Time Zone Utilities For Models
     :target: https://travis-ci.org/michaeljohnbarr/django-timezone-utils
     :alt: Test Status
 
-.. image:: https://landscape.io/github/michaeljohnbarr/django-timezone-utils/master/landscape.png
-    :target: https://landscape.io/github/michaeljohnbarr/django-timezone-utils
-    :alt: Code Health
-
 .. image:: https://coveralls.io/repos/michaeljohnbarr/django-timezone-utils/badge.svg
     :target: https://coveralls.io/r/michaeljohnbarr/django-timezone-utils
     :alt: Coverage Status
+
+.. image:: https://landscape.io/github/michaeljohnbarr/django-timezone-utils/master/landscape.png
+    :target: https://landscape.io/github/michaeljohnbarr/django-timezone-utils
+    :alt: Code Health
     
 .. image:: https://pypip.in/py_versions/django-timezone-utils/badge.svg?style=flat
     :target: https://pypi.python.org/pypi/django-timezone-utils/
