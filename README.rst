@@ -30,7 +30,6 @@ Django Timezone Utils: Time Zone Utilities For Models
     :alt: Development Status
 
 
-
 **django-timezone-utils** adds automatic time zone conversions and support
 utilities to Django.
 
@@ -41,7 +40,7 @@ welcomed and appreciated.
 Installation
 ------------
 
-*django-timezone-utils* works with Django 1.4, 1.5, 1.6 and 1.7.
+**django-timezone-utils** works with Django 1.4, 1.5, 1.6 and 1.7.
 
 To install it, simply:
 
@@ -100,12 +99,13 @@ Imagine you have the models ``Location`` and ``LocationReportingPeriod``:
 
     def _get_reporting_period_timzone(obj):
         """Called as `obj` being the LocationReportingPeriodInstance.
-        
+
         Note:
             populate_from=lambda: instance: instance.location.timezone is not valid.
 
         """
         return obj.location.timezone
+
 
     class LocationReportingPeriod(models.Model)
         location = models.ForeignKey(
@@ -161,8 +161,8 @@ For each location, let's say that the client wants to see the start and end of
 the reporting period in that location's time zone. One thing to remember is that
 just because you saved the LocationReportingPeriod start/end dates as a
 particular time zone, it does not mean that they will come that way from the
-database. For example, if your application's settings.TIME_ZONE is set to
-``UTC``, you would get back:
+database. For example, if your application's ``settings.TIME_ZONE = 'UTC'``,
+you would get back:
 
 .. code-block:: python
 
@@ -182,6 +182,7 @@ Here is how we would handle the displaying conversions from view to template:
 
     # App
     from app_label.models import LocationReportingPeriod
+
 
     class LocationReportingPeriodListView(ListView):
         model = LocationReportingPeriod
