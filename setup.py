@@ -8,7 +8,7 @@ version = __import__('timezone_utils').VERSION
 setup(
     name='django-timezone-utils',
     version=version,
-    description='',
+    description='Time Zone Utilities for Django Models',
     long_description=open(
         os.path.join(
             os.path.dirname(__file__),
