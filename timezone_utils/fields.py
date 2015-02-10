@@ -207,17 +207,20 @@ class LinkedTZDateTimeField(with_metaclass(SubfieldBase, DateTimeField)):
                 # It was a valiant effort. Resistance is futile.
                 raise
 
-            datetime_as_timezone = value.astimezone(tz)
-            value = tz.normalize(
-                tz.localize(
-                    datetime.combine(
-                        date=datetime_as_timezone.date(),
-                        time=datetime_as_timezone.time()
+            # We don't want to double-convert the value. This leads to incorrect
+            #   dates being generated when the overridden time goes back a day.
+            if self.time_override is None:
+                datetime_as_timezone = value.astimezone(tz)
+                value = tz.normalize(
+                    tz.localize(
+                        datetime.combine(
+                            date=datetime_as_timezone.date(),
+                            time=datetime_as_timezone.time()
+                        )
                     )
                 )
-            )
 
-        if self.time_override and not (
+        if self.time_override is not None and not (
             self.auto_now or (self.auto_now_add and add)
         ):
             if callable(self.time_override):
@@ -226,7 +229,9 @@ class LinkedTZDateTimeField(with_metaclass(SubfieldBase, DateTimeField)):
                 time_override = self.time_override
 
             if not isinstance(time_override, datetime_time):
-                raise ValidationError('meh')
+                raise ValueError(
+                    'Invalid type. Must be a datetime.time instance.'
+                )
 
             value = tz.normalize(
                 tz.localize(

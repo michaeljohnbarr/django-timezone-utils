@@ -97,7 +97,7 @@ Imagine you have the models ``Location`` and ``LocationReportingPeriod``:
         )
 
 
-    def _get_reporting_period_timzone(obj):
+    def _get_reporting_period_timezone(obj):
         """Called as `obj` being the LocationReportingPeriodInstance.
 
         Note:
@@ -117,13 +117,13 @@ Imagine you have the models ``Location`` and ``LocationReportingPeriod``:
             verbose_name=_('start'),
             # populate_from can also be a string value, provided that the string value
             #   is a field on the same model
-            populate_from=_get_reporting_period_timzone,
+            populate_from=_get_reporting_period_timezone,
             # Time override must be a datetime.time instance
             time_override=datetime.min.time(),
         )
         end = LinkedTZDateTimeField(
             verbose_name=_('end'),
-            populate_from=_get_reporting_period_timzone,
+            populate_from=_get_reporting_period_timezone,
             # Time override must be a datetime.time instance
             time_override=datetime.max.time(),
         )
@@ -253,7 +253,8 @@ Contributors
 
 Changelog
 ---------
-
+- 0.5 Bug fix: time override on datetime.min.time() failed to set time properly
+- 0.4 Removed support for Python 2.5
 - 0.3 Code cleanup.
 - 0.2 Multiple bug fixes based on testing.
 - 0.1 Initial release.
