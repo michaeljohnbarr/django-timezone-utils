@@ -5,13 +5,11 @@
 import pytz
 
 # Django
-from django.core.exceptions import ValidationError
 from django.test import TestCase
 
 # App
-from tests.models import (ModelWithBadPopulateFrom,
-                                                  ModelWithBadTimeOverride,
-                                                  ModelWithBadTimeZoneCharField)
+from tests.models import (ModelWithBadPopulateFrom,  ModelWithBadTimeOverride,
+                          ModelWithBadTimeZoneCharField)
 
 
 # ==============================================================================
@@ -23,7 +21,7 @@ class InvalidDateTimeWithTimeZoneFieldTestCase(TestCase):
             ModelWithBadPopulateFrom.objects.create(),
 
     def test_bad_time_override_value(self):
-        with self.assertRaises(ValidationError):
+        with self.assertRaises(ValueError):
             ModelWithBadTimeOverride.objects.create()
 
     def test_bad_populate_from_timezone_as_charfield(self):
