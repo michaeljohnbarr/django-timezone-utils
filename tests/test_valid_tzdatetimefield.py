@@ -15,13 +15,10 @@ from django.utils.timezone import make_aware
 
 # App
 from tests.models import TZWithGoodStringDefault
-from .models import (ModelWithDateTimeOnly,
-                                                CallableTimeStampedModel,
-                                                StaticTimeStampedModel,
-                                                ModelWithForeignKeyToTimeZone,
-                                                NullModelWithDateTimeOnly,
-                                                ModelWithLocalTimeZone,
-                                                ModelWithLocalTZCharField)
+from .models import (ModelWithDateTimeOnly, CallableTimeStampedModel,
+                     StaticTimeStampedModel, ModelWithForeignKeyToTimeZone,
+                     NullModelWithDateTimeOnly, ModelWithLocalTimeZone,
+                     ModelWithLocalTZCharField)
 
 
 # ==============================================================================
@@ -107,4 +104,21 @@ class DateTimeWithTimeZoneFieldTestCase(TestCase):
         self.assertEqual(
             model_instance.timestamp,
             settings.TEST_DATETIME
+        )
+
+    def test_to_python_conversion(self):
+        model_instance = ModelWithForeignKeyToTimeZone.objects.get()
+        self.assertEqual(
+            model_instance.timestamp,
+            settings.TEST_DATETIME
+        )
+        self.assertEqual(
+            model_instance.timestamp.tzinfo,
+            pytz.timezone('US/Eastern').normalize(
+                model_instance.timestamp
+            ).tzinfo
+        )
+        self.assertEqual(
+            str(model_instance.timestamp),
+            '2013-12-31 19:00:00-05:00'
         )

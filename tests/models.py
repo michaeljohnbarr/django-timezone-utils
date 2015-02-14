@@ -120,7 +120,7 @@ class CallableTimeStampedModel(models.Model):
     )
     end = LinkedTZDateTimeField(
         default=settings.TEST_DATETIME,
-        time_override=datetime.max.time
+        time_override=datetime.max.time()
     )
 
 
@@ -135,6 +135,10 @@ class StaticTimeStampedModel(models.Model):
     )
 
 
+def get_other_model_timezone(obj):
+    return obj.other_model.timezone
+
+
 class ModelWithForeignKeyToTimeZone(models.Model):
     other_model = models.ForeignKey(
         to='tests.TZWithGoodStringDefault',
@@ -142,7 +146,7 @@ class ModelWithForeignKeyToTimeZone(models.Model):
     )
     timestamp = LinkedTZDateTimeField(
         default=settings.TEST_DATETIME,
-        populate_from=lambda instance: instance.other_model.timezone
+        populate_from=get_other_model_timezone,
     )
 
 

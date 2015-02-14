@@ -9,13 +9,13 @@ import pytz
 # Django
 try:
     from django.core import checks
-except ImportError:
+except ImportError:     # pragma: no cover
     pass
 from django.core.exceptions import ValidationError
 from django.db.models import SubfieldBase
 from django.db.models.fields import DateTimeField, CharField
 from django.utils.six import with_metaclass
-from django.utils.timezone import get_default_timezone
+from django.utils.timezone import get_default_timezone, is_naive, make_aware
 from django.utils.translation import ugettext_lazy as _
 
 # App
@@ -47,11 +47,15 @@ class TimeZoneField(with_metaclass(SubfieldBase, CharField)):
         super(TimeZoneField, self).__init__(*args, **kwargs)
 
     def get_prep_value(self, value):
+        """Converts timezone instances to strings for db storage."""
+
         if isinstance(value, tzinfo):
             return value.zone
         return value
 
     def to_python(self, value):
+        """Returns a datetime.tzinfo instance for the value."""
+
         value = super(TimeZoneField, self).to_python(value)
 
         if not value:
@@ -67,6 +71,8 @@ class TimeZoneField(with_metaclass(SubfieldBase, CharField)):
             )
 
     def formfield(self, **kwargs):
+        """Returns a custom form field for the TimeZoneField."""
+
         defaults = {'form_class': forms.TimeZoneField}
         defaults.update(**kwargs)
         return super(TimeZoneField, self).formfield(**defaults)
@@ -75,16 +81,19 @@ class TimeZoneField(with_metaclass(SubfieldBase, CharField)):
     # Django >= 1.7 Checks Framework
     # --------------------------------------------------------------------------
     def check(self, **kwargs):  # pragma: no cover
+        """Calls the TimeZoneField's custom checks."""
+
         errors = super(TimeZoneField, self).check(**kwargs)
         errors.extend(self._check_timezone_max_length_attribute())
         errors.extend(self._check_choices_attribute())
         return errors
 
     def _check_timezone_max_length_attribute(self):     # pragma: no cover
-        """Custom check() method that verifies that the `max_length` attribute
-        covers all possible pytz timezone lengths.
-
         """
+        Checks that the `max_length` attribute covers all possible pytz timezone
+        lengths.
+        """
+
         # Retrieve the maximum possible length for the time zone string
         possible_max_length = max(map(len, pytz.all_timezones))
 
@@ -114,6 +123,8 @@ class TimeZoneField(with_metaclass(SubfieldBase, CharField)):
         return []
 
     def _check_choices_attribute(self):   # pragma: no cover
+        """Checks to make sure that choices contains valid timezone choices."""
+
         if self.choices:
             warning_params = {
                 'msg': (
@@ -171,10 +182,26 @@ class LinkedTZDateTimeField(with_metaclass(SubfieldBase, DateTimeField)):
     def __init__(self, *args, **kwargs):
         self.populate_from = kwargs.pop('populate_from', None)
         self.time_override = kwargs.pop('time_override', None)
+        self.timezone = get_default_timezone()
 
         super(LinkedTZDateTimeField, self).__init__(*args, **kwargs)
 
+    def to_python(self, value):
+        """Convert the value to the appropriate timezone."""
+
+        value = super(LinkedTZDateTimeField, self).to_python(value)
+
+        if not value:
+            return value
+
+        return value.astimezone(self.timezone)
+
     def pre_save(self, model_instance, add):
+        """
+        Converts the value being saved based on `populate_from` and
+        `time_override`
+        """
+
         # Retrieve the currently entered datetime
         value = super(
             LinkedTZDateTimeField,
@@ -184,70 +211,20 @@ class LinkedTZDateTimeField(with_metaclass(SubfieldBase, DateTimeField)):
             add=add
         )
 
-        if not value:
-            return value
-
-        # Retrieve the default timezone
-        tz = get_default_timezone()
-
-        if self.populate_from:
-            if hasattr(self.populate_from, '__call__'):
-                # LinkedTZDateTimeField(
-                #     populate_from=lambda instance: instance.field.timezone
-                # )
-                tz = self.populate_from(model_instance)
-            else:
-                # LinkedTZDateTimeField(populate_from='field')
-                from_attr = getattr(model_instance, self.populate_from)
-                tz = callable(from_attr) and from_attr() or from_attr
-
-            try:
-                tz = pytz.timezone(str(tz))
-            except pytz.UnknownTimeZoneError:
-                # It was a valiant effort. Resistance is futile.
-                raise
-
-            # We don't want to double-convert the value. This leads to incorrect
-            #   dates being generated when the overridden time goes back a day.
-            if self.time_override is None:
-                datetime_as_timezone = value.astimezone(tz)
-                value = tz.normalize(
-                    tz.localize(
-                        datetime.combine(
-                            date=datetime_as_timezone.date(),
-                            time=datetime_as_timezone.time()
-                        )
-                    )
-                )
-
-        if self.time_override is not None and not (
-            self.auto_now or (self.auto_now_add and add)
-        ):
-            if callable(self.time_override):
-                time_override = self.time_override()
-            else:
-                time_override = self.time_override
-
-            if not isinstance(time_override, datetime_time):
-                raise ValueError(
-                    'Invalid type. Must be a datetime.time instance.'
-                )
-
-            value = tz.normalize(
-                tz.localize(
-                    datetime.combine(
-                        date=value.date(),
-                        time=time_override,
-                    )
-                )
-            )
+        # Convert the value to the correct time/timezone
+        value = self._convert_value(
+            value=value,
+            model_instance=model_instance,
+            add=add
+        )
 
         setattr(model_instance, self.attname, value)
-        setattr(model_instance, '_timezone', tz)
 
         return value
 
     def deconstruct(self):  # pragma: no cover
+        """Add our custom keyword arguments for migrations."""
+
         name, path, args, kwargs = super(
             LinkedTZDateTimeField,
             self
@@ -255,9 +232,88 @@ class LinkedTZDateTimeField(with_metaclass(SubfieldBase, DateTimeField)):
 
         # Only include kwarg if it's not the default
         if self.populate_from is not None:
+            # Since populate_from requires a model instance and Django does not,
+            #   allow lambda, we hope that we have been provided a function that
+            #   can be parsed
             kwargs['populate_from'] = self.populate_from
 
+        # Only include kwarg if it's not the default
         if self.time_override is not None:
-            kwargs['time_override'] = self.time_override
+            if hasattr(self.time_override, '__call__'):
+                # Call the callable datetime.time instance
+                kwargs['time_override'] = self.time_override()
+            else:
+                kwargs['time_override'] = self.time_override
 
         return name, path, args, kwargs
+
+    def _get_populate_from(self, model_instance):
+        """Retrieves the timezone or None from the `populate_from` attribute."""
+
+        if hasattr(self.populate_from, '__call__'):
+            tz = self.populate_from(model_instance)
+        else:
+            from_attr = getattr(model_instance, self.populate_from)
+            tz = callable(from_attr) and from_attr() or from_attr
+
+        try:
+            tz = pytz.timezone(str(tz))
+        except pytz.UnknownTimeZoneError:
+            # It was a valiant effort. Resistance is futile.
+            raise
+
+        # If we have a timezone, set the instance's timezone attribute
+        self.timezone = tz
+
+        return tz
+
+    def _get_time_override(self):
+        """
+        Retrieves the datetime.time or None from the `time_override` attribute.
+        """
+
+        if callable(self.time_override):
+            time_override = self.time_override()
+        else:
+            time_override = self.time_override
+
+        if not isinstance(time_override, datetime_time):
+            raise ValueError(
+                'Invalid type. Must be a datetime.time instance.'
+            )
+
+        return time_override
+
+    def _convert_value(self, value, model_instance, add):
+        """
+        Converts the value to the appropriate timezone and time as declared by
+        the `time_override` and `populate_from` attributes.
+        """
+
+        if not value:
+            return value
+
+        # Retrieve the default timezone as the default
+        tz = get_default_timezone()
+
+        if self.time_override is not None and not (
+            self.auto_now or (self.auto_now_add and add)
+        ):
+            time_override = self._get_time_override()
+
+            value = datetime.combine(
+                date=value.date(),
+                time=time_override
+            )
+
+        # If populate_from exists, override the default timezone
+        if self.populate_from:
+            tz = self._get_populate_from(model_instance)
+
+        if is_naive(value):
+            value = make_aware(value=value, timezone=tz)
+
+        if not value.tzinfo == tz:
+            value = value.astimezone(tz)
+
+        return value
