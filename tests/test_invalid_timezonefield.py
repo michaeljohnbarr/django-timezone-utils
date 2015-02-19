@@ -24,8 +24,5 @@ class InvalidTimeZoneFieldTestCase(TestCase):
         )
 
     def test_bad_location_default_string(self):
-        with self.assertRaisesMessage(
-            expected_exception=ValidationError,
-            expected_message="'Bad/Worse' is not a valid time zone."
-        ):
+        with self.assertRaises(ValidationError):
             TZWithBadStringDefault.objects.create()

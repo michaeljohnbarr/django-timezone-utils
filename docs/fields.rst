@@ -13,6 +13,9 @@ TimeZoneField
 .. |datetime.tzinfo| replace:: ``datetime.tzinfo``
 .. _datetime.tzinfo: https://docs.python.org/2/library/datetime.html#tzinfo-objects
 
+.. |datetime.datetime| replace:: ``datetime.datetime``
+.. _datetime.datetime: https://docs.python.org/2/library/datetime.html#datetime-objects
+
 .. |models.CharField| replace:: ``models.CharField``
 .. _models.CharField: https://docs.djangoproject.com/en/dev/ref/models/fields/#charfield
 
@@ -105,8 +108,13 @@ LinkedTZDateTimeField
                           the timezone or a string (if the timezone field is
                           located on the model).
     :param time_override: Automatically overrides the time value each time the
-                          object is saved to the time that is declared.Must be a
-                          |datetime.time|_ instance.
+                          object is saved to the time that is declared. Must be
+                          a |datetime.time|_ instance.
+    :raises AttributeError: if the ``populate_from`` parameter is invalid.
+    :raises ValueError: if the ``time_override`` is not a |datetime.time|_ instance.
+    :raises pytz.UnknownTimeZoneError: if the parsed model instance value of ``populate_from`` is not a valid Olson time zone string.
+    :return: A |datetime.datetime|_ object based on the time zone declared in ``populate_from`` and override from ``time_override`` or |None|_.
+    :rtype: |datetime.datetime|_
 
 .. note:: If ``auto_now`` or ``auto_now_add`` is declared, the value of ``time_override`` is ignored.
 .. caution:: `Django cannot serialize lambdas! <https://docs.djangoproject.com/en/1.7/ref/models/fields/#default>`_
