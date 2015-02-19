@@ -3,7 +3,6 @@
 # ==============================================================================
 # Python
 from datetime import tzinfo
-
 import pytz
 
 
@@ -12,10 +11,8 @@ from django.core.exceptions import ValidationError
 from django.forms import ModelForm
 from django.test import TestCase
 
-from tests.models import (LocationTimeZone,
-                                         LocationTimeZoneChoices,
-                                         TZWithGoodStringDefault,
-                                         TZWithGoodTZInfoDefault)
+from tests.models import (LocationTimeZone, LocationTimeZoneChoices,
+                          TZWithGoodStringDefault, TZWithGoodTZInfoDefault)
 
 
 # ==============================================================================

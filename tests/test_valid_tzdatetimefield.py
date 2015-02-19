@@ -3,15 +3,12 @@
 # ==============================================================================
 # Python
 from datetime import datetime
-
 import pytz
-
 
 # Django
 from django.conf import settings
 from django.test import TestCase
 from django.utils.timezone import make_aware
-
 
 # App
 from tests.models import TZWithGoodStringDefault
@@ -49,12 +46,16 @@ class DateTimeWithTimeZoneFieldTestCase(TestCase):
     def test_callable_timestamp_time_override(self):
         model_instance = CallableTimeStampedModel.objects.get()
         self.assertEquals(
-            model_instance.start.astimezone(pytz.timezone(settings.TIME_ZONE)).time(),
+            model_instance.start.astimezone(
+                pytz.timezone(settings.TIME_ZONE)
+            ).time(),
             datetime.min.time(),
             'Start time does not match datetime.min.time().'
         )
         self.assertEquals(
-            model_instance.end.astimezone(pytz.timezone(settings.TIME_ZONE)).time(),
+            model_instance.end.astimezone(
+                pytz.timezone(settings.TIME_ZONE)
+            ).time(),
             datetime.max.time(),
             'End time does not match datetime.max.time().'
         )
@@ -62,13 +63,17 @@ class DateTimeWithTimeZoneFieldTestCase(TestCase):
     def test_datetime_time_timestamp_override(self):
         model_instance = StaticTimeStampedModel.objects.get()
         tz = pytz.timezone(settings.TIME_ZONE)
-        start_time = tz.normalize(make_aware(datetime(2014, 1, 1, 0, 0, 0, 0), tz))
-        end_time = tz.normalize(make_aware(datetime(2014, 1, 1, 23, 59, 59, 999999), tz))
+        start_time = tz.normalize(
+            make_aware(datetime(2014, 1, 1, 0, 0, 0, 0), tz)
+        )
+        end_time = tz.normalize(
+            make_aware(datetime(2014, 1, 1, 23, 59, 59, 999999), tz)
+        )
 
         self.assertEquals(
             model_instance.start,
             start_time,
-            'Start time does not match datetime.min.time(): ({0} != {1})'.format(
+            'Start time != datetime.min.time(): ({0} != {1})'.format(
                 repr(model_instance.start),
                 repr(start_time)
             )
@@ -76,7 +81,7 @@ class DateTimeWithTimeZoneFieldTestCase(TestCase):
         self.assertEquals(
             model_instance.end,
             end_time,
-            'End time does not match datetime.max.time(): ({0} != {1})'.format(
+            'End time != datetime.max.time(): ({0} != {1})'.format(
                 repr(model_instance.end),
                 repr(end_time)
             )

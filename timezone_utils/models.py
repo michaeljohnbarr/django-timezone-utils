@@ -1,1 +1,1 @@
-# Intentionally left empty for backwards-compatibility for Django < 1.7
+# Intentionally left empty for backwards-compatibility to Django < 1.7

@@ -10,8 +10,11 @@ import pytz
 from django.test import TestCase
 
 # App
-from timezone_utils.choices import *
-from timezone_utils.choices import TIMEZONE_OFFSET_REGEX
+from timezone_utils.choices import (ALL_TIMEZONES_CHOICES,
+                                    COMMON_TIMEZONES_CHOICES,
+                                    PRETTY_ALL_TIMEZONES_CHOICES,
+                                    PRETTY_COMMON_TIMEZONES_CHOICES,
+                                    TIMEZONE_OFFSET_REGEX, get_choices)
 
 
 # ==============================================================================
@@ -64,8 +67,8 @@ class TimeZoneChoicesTestCase(TestCase):
             self.assertIn(
                 value,
                 pytz.common_timezones,
-                'The value "{0}" from COMMON_TIMEZONES_CHOICES was not found in '
-                'pytz.common_timezones.'.format(
+                'The value "{0}" from COMMON_TIMEZONES_CHOICES was not found '
+                'in pytz.common_timezones.'.format(
                     value
                 )
             )
@@ -84,8 +87,8 @@ class TimeZoneChoicesTestCase(TestCase):
             self.assertIn(
                 value,
                 pytz.all_timezones,
-                'The value "{0}" from PRETTY_ALL_TIMEZONES_CHOICES was not found'
-                ' in pytz.all_timezones.'.format(
+                'The value "{0}" from PRETTY_ALL_TIMEZONES_CHOICES was not '
+                'found in pytz.all_timezones.'.format(
                     value
                 )
             )

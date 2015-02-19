@@ -5,6 +5,7 @@
 from __future__ import unicode_literals
 from datetime import datetime, tzinfo, time as datetime_time
 import pytz
+import warnings
 
 # Django
 try:
@@ -28,21 +29,32 @@ __all__ = ('TimeZoneField', 'LinkedTZDateTimeField')
 # MODEL FIELDS
 # ==============================================================================
 class TimeZoneField(with_metaclass(SubfieldBase, CharField)):
+    # Enforce the minimum length of max_length to be the length of the longest
+    #   pytz timezone string
+    MIN_LENGTH = max(map(len, pytz.all_timezones))
     default_error_messages = {
         'invalid': _("'%(value)s' is not a valid time zone."),
     }
 
     def __init__(self, *args, **kwargs):
-        # Retrieve the maximum length of the timezone values from pytz
-        timezone_max_length = max(map(len, pytz.all_timezones))
-
         # Retrieve the model field's declared max_length or default to pytz's
         #   maximum length
-        declared_max_length = kwargs.get('max_length', timezone_max_length)
+        declared_max_length = kwargs.get('max_length', self.MIN_LENGTH)
 
         # Set the max length to the highest value between the timezone maximum
         #   length and the declared max_length
-        kwargs['max_length'] = max(declared_max_length, timezone_max_length)
+        kwargs['max_length'] = max(declared_max_length, self.MIN_LENGTH)
+
+        # Warn that we changed the value of max_length so that they can
+        if declared_max_length and declared_max_length != kwargs['max_length']:
+            warnings.warn(
+                message='TimeZoneField max_length updated from {declared} to '
+                '{current}.'.format(
+                    declared=declared_max_length,
+                    current=kwargs['max_length']
+                ),
+                category=UserWarning,
+            )
 
         super(TimeZoneField, self).__init__(*args, **kwargs)
 
@@ -132,7 +144,7 @@ class TimeZoneField(with_metaclass(SubfieldBase, CharField)):
                     "which was not found as a supported time zone by pytz "
                     "{version}."
                 ),
-                'hint': "Values must be found in pytz.common_timezones.",
+                'hint': "Values must be found in pytz.all_timezones.",
                 'obj': self,
             }
 
@@ -296,6 +308,8 @@ class LinkedTZDateTimeField(with_metaclass(SubfieldBase, DateTimeField)):
         # Retrieve the default timezone as the default
         tz = get_default_timezone()
 
+        # Do not convert the time to the time override if auto_now or
+        #   auto_now_add is set
         if self.time_override is not None and not (
             self.auto_now or (self.auto_now_add and add)
         ):
@@ -307,12 +321,15 @@ class LinkedTZDateTimeField(with_metaclass(SubfieldBase, DateTimeField)):
             )
 
         # If populate_from exists, override the default timezone
-        if self.populate_from:
+        if self.populate_from is not None:
             tz = self._get_populate_from(model_instance)
 
+        # If the value is naive (due to the time_override conversion), make it
+        #   aware based on the appropriate timezone
         if is_naive(value):
             value = make_aware(value=value, timezone=tz)
 
+        # Set the value to the correct timezone
         if not value.tzinfo == tz:
             value = value.astimezone(tz)
 

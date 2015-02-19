@@ -9,12 +9,11 @@ from django.core.exceptions import ValidationError
 from django.test import TestCase
 
 # App
-from tests.models import (TZWithBadStringDefault,
-                                           TZWithLowMaxLength)
+from tests.models import (TZWithBadStringDefault, TZWithLowMaxLength)
 
 
 # ==============================================================================
-# IMPORTS
+# TESTS
 # ==============================================================================
 class InvalidTimeZoneFieldTestCase(TestCase):
     def test_location_max_length(self):
@@ -25,5 +24,8 @@ class InvalidTimeZoneFieldTestCase(TestCase):
         )
 
     def test_bad_location_default_string(self):
-        with self.assertRaises(ValidationError):
+        with self.assertRaisesMessage(
+            expected_exception=ValidationError,
+            expected_message="'Bad/Worse' is not a valid time zone."
+        ):
             TZWithBadStringDefault.objects.create()
