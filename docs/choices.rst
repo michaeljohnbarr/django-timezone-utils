@@ -3,9 +3,6 @@ Choices
 =======
 Contains constants and functions to generate model/form choices for time zones.
 
-Constants
-=========
-
 ``ALL_TIMEZONES_CHOICES``
 -------------------------
 .. |pytz.all_timezones| replace:: ``pytz.all_timezones``
@@ -109,9 +106,6 @@ Constants
         ('Pacific/Marquesas', '(GMT-09:30) Pacific/Marquesas'),
         ...
     )
-
-Functions
-=========
 
 ``get_choices(timezones)``
 --------------------------
