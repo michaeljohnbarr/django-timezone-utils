@@ -5,6 +5,7 @@
 from datetime import datetime
 from operator import itemgetter
 import pytz
+import re
 
 # Django
 from django.test import TestCase
@@ -12,6 +13,8 @@ from django.test import TestCase
 # App
 from timezone_utils.choices import (ALL_TIMEZONES_CHOICES,
                                     COMMON_TIMEZONES_CHOICES,
+                                    GROUPED_ALL_TIMEZONES_CHOICES,
+                                    GROUPED_COMMON_TIMEZONES_CHOICES,
                                     PRETTY_ALL_TIMEZONES_CHOICES,
                                     PRETTY_COMMON_TIMEZONES_CHOICES,
                                     TIMEZONE_OFFSET_REGEX, get_choices)
@@ -113,7 +116,51 @@ class TimeZoneChoicesTestCase(TestCase):
                 )
             )
 
-    def test_get_choices_values(self):
+    def test_GROUPED_ALL_TIMEZONES_CHOICES_group_name(self):
+        group_name_re = re.compile(r'GMT(\+|-)\d{2}:\d{2}')
+        for group_name in map(lambda x: x[0], GROUPED_ALL_TIMEZONES_CHOICES):
+            self.assertNotEqual(
+                group_name_re.match(group_name),
+                None
+            )
+
+    def test_GROUPED_COMMON_TIMEZONES_CHOICES_group_name(self):
+        group_name_re = re.compile(r'GMT(\+|-)\d{2}:\d{2}')
+        for group_name in map(lambda x: x[0], GROUPED_COMMON_TIMEZONES_CHOICES):
+            self.assertNotEqual(
+                group_name_re.match(group_name),
+                None
+            )
+
+    def test_GROUPED_ALL_TIMEZONES_CHOICES_values(self):
+        for name, display in map(
+            lambda v: v[0],
+            map(lambda x: x[1], GROUPED_ALL_TIMEZONES_CHOICES)
+        ):
+            self.assertIn(
+                name,
+                pytz.all_timezones
+            )
+            self.assertIn(
+                display,
+                pytz.all_timezones
+            )
+
+    def test_GROUPED_COMMON_TIMEZONES_CHOICES_values(self):
+        for name, display in map(
+            lambda v: v[0],
+            map(lambda x: x[1], GROUPED_COMMON_TIMEZONES_CHOICES)
+        ):
+            self.assertIn(
+                name,
+                pytz.common_timezones
+            )
+            self.assertIn(
+                display,
+                pytz.common_timezones
+            )
+
+    def test_get_choices_values_ungrouped(self):
         choices = get_choices(pytz.common_timezones)
         values = map(itemgetter(0), choices)
         for value in values:

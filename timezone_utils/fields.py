@@ -308,21 +308,23 @@ class LinkedTZDateTimeField(with_metaclass(SubfieldBase, DateTimeField)):
         # Retrieve the default timezone as the default
         tz = get_default_timezone()
 
+        # If populate_from exists, override the default timezone
+        if self.populate_from is not None:
+            tz = self._get_populate_from(model_instance)
+
         # Do not convert the time to the time override if auto_now or
         #   auto_now_add is set
         if self.time_override is not None and not (
             self.auto_now or (self.auto_now_add and add)
         ):
+            # Retrieve the time override
             time_override = self._get_time_override()
 
+            # Convert the value to the date/time
             value = datetime.combine(
                 date=value.date(),
                 time=time_override
             )
-
-        # If populate_from exists, override the default timezone
-        if self.populate_from is not None:
-            tz = self._get_populate_from(model_instance)
 
         # If the value is naive (due to the time_override conversion), make it
         #   aware based on the appropriate timezone

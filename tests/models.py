@@ -164,3 +164,20 @@ class ModelWithLocalTZCharField(models.Model):
         default=settings.TEST_DATETIME,
         populate_from='timezone'
     )
+
+
+class TZTimeFramedModel(models.Model):
+    other_model = models.ForeignKey(
+        to='tests.TZWithGoodStringDefault',
+        related_name='fk_to_tz_too'
+    )
+    start = LinkedTZDateTimeField(
+        default=settings.TEST_DATETIME,
+        populate_from=get_other_model_timezone,
+        time_override=datetime.min.time()
+    )
+    end = LinkedTZDateTimeField(
+        default=settings.TEST_DATETIME,
+        populate_from=get_other_model_timezone,
+        time_override=datetime.max.time()
+    )

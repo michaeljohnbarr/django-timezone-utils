@@ -2,11 +2,14 @@
 # IMPORTS
 # ==============================================================================
 # Python
+from collections import defaultdict, namedtuple
 from datetime import datetime
+from operator import attrgetter
 import pytz
 import re
 
 __all__ = ('get_choices', 'ALL_TIMEZONES_CHOICES', 'COMMON_TIMEZONES_CHOICES',
+           'GROUPED_ALL_TIMEZONES_CHOICES', 'GROUPED_COMMON_TIMEZONES_CHOICES',
            'PRETTY_ALL_TIMEZONES_CHOICES', 'PRETTY_COMMON_TIMEZONES_CHOICES')
 
 
@@ -19,9 +22,13 @@ TIMEZONE_OFFSET_REGEX = re.compile(
 )
 
 
-def get_choices(timezones):
+def get_choices(timezones, grouped=False):
     """Retrieves timezone choices from any iterable (normally pytz)."""
-    timezone_choices = []
+
+    # Created a namedtuple to store the "key" for the choices_dict
+    TZOffset = namedtuple('TZOffset', 'value offset_string')
+
+    choices_dict = defaultdict(list)
 
     # Iterate through the timezones and populate the timezone choices
     for tz in iter(timezones):
@@ -31,27 +38,43 @@ def get_choices(timezones):
         # Retrieve the timezone offset ("-0500" / "+0500")
         offset = now.strftime("%z")
 
-        # Format the timezone display string
-        display_string = '(GMT{plus_minus}{hours}:{minutes}) {tz}'.format(
-            tz=tz,
+        # Retrieve the offset string ("GMT-12:00" / "GMT+12:00")
+        timezone_offset_string = 'GMT{plus_minus}{hours}:{minutes}'.format(
             **TIMEZONE_OFFSET_REGEX.match(offset).groupdict()
         )
 
-        # Append a tuple of the timezone information:
-        #   (-500, 'US/Eastern', '(GMT-05:00) US/Eastern')
-        timezone_choices.append((int(offset), tz, display_string))
+        if not grouped:
+            # Format the timezone display string
+            display_string = '({timezone_offset_string}) {tz}'.format(
+                timezone_offset_string=timezone_offset_string,
+                tz=tz,
+            )
+        else:
+            display_string = tz
 
-    # Sort the timezone choices by the integer offsets (negative to positive)
-    timezone_choices.sort()
+        choices_dict[
+            TZOffset(value=int(offset), offset_string=timezone_offset_string)
+        ].append(
+            (tz, display_string)
+        )
 
-    # Iterate through the timezone choices by index, and update the index to
-    #   remove the integer offset, leaving the:
-    #       ('US/Eastern', '(GMT-05:00) US/Eastern')
-    for i in range(len(timezone_choices)):
-        timezone_choices[i] = timezone_choices[i][1:]
+    choices = []
+
+    for tz_offset in sorted(choices_dict, key=attrgetter('value')):
+        if not grouped:
+            choices.extend(
+                tuple(choices_dict[tz_offset])
+            )
+        else:
+            choices.append(
+                (
+                    tz_offset.offset_string,
+                    tuple(choices_dict[tz_offset])
+                )
+            )
 
     # Cast the timezone choices to a tuple and return
-    return tuple(timezone_choices)
+    return tuple(choices)
 
 
 # ==============================================================================
@@ -63,6 +86,16 @@ COMMON_TIMEZONES_CHOICES = tuple(
     zip(pytz.common_timezones, pytz.common_timezones)
 )
 
+# Grouped by timezone offset, with "GMT-05:00" as the group name
+GROUPED_ALL_TIMEZONES_CHOICES = get_choices(
+    timezones=pytz.all_timezones,
+    grouped=True
+)
+GROUPED_COMMON_TIMEZONES_CHOICES = get_choices(
+    timezones=pytz.common_timezones,
+    grouped=True
+)
+
 # Sorted by timezone offset, with "(GMT-05:00) US/Eastern" as the display name
-PRETTY_ALL_TIMEZONES_CHOICES = get_choices(pytz.all_timezones)
-PRETTY_COMMON_TIMEZONES_CHOICES = get_choices(pytz.common_timezones)
+PRETTY_ALL_TIMEZONES_CHOICES = get_choices(timezones=pytz.all_timezones)
+PRETTY_COMMON_TIMEZONES_CHOICES = get_choices(timezones=pytz.common_timezones)

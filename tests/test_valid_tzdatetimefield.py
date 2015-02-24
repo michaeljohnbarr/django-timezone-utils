@@ -15,7 +15,7 @@ from tests.models import TZWithGoodStringDefault
 from .models import (ModelWithDateTimeOnly, CallableTimeStampedModel,
                      StaticTimeStampedModel, ModelWithForeignKeyToTimeZone,
                      NullModelWithDateTimeOnly, ModelWithLocalTimeZone,
-                     ModelWithLocalTZCharField)
+                     ModelWithLocalTZCharField, TZTimeFramedModel)
 
 
 # ==============================================================================
@@ -31,6 +31,11 @@ class DateTimeWithTimeZoneFieldTestCase(TestCase):
 
         location = TZWithGoodStringDefault.objects.create()
         ModelWithForeignKeyToTimeZone.objects.create(other_model=location)
+        TZTimeFramedModel.objects.create(
+            start=make_aware(datetime(2014, 1, 1), pytz.timezone('US/Eastern')),
+            end=make_aware(datetime(2014, 12, 31), pytz.timezone('US/Eastern')),
+            other_model=location
+        )
 
     def test_that_model_timestamp_is_unaltered(self):
         """Make sure that we aren't modifying the timezone if one is not
@@ -126,4 +131,15 @@ class DateTimeWithTimeZoneFieldTestCase(TestCase):
         self.assertEqual(
             str(model_instance.timestamp),
             '2013-12-31 19:00:00-05:00'
+        )
+
+    def test_full_overrides(self):
+        model_instance = TZTimeFramedModel.objects.get()
+        self.assertEqual(
+            str(model_instance.start),
+            '2014-01-01 00:00:00-05:00'
+        )
+        self.assertEqual(
+            str(model_instance.end),
+            '2014-12-31 23:59:59.999999-05:00'
         )

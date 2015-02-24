@@ -40,7 +40,7 @@ welcomed and appreciated.
 Documentation
 -------------
 
-Documentation for django-timezone-utils is available at `Read the Docs <https://django-timezone-utils.readthedocs.org/>`_
+Documentation for django-timezone-utils is available at `Read the Docs <https://django-timezone-utils.readthedocs.org/>`_.
 
 Inspiration
 -----------
@@ -107,6 +107,7 @@ Contributors
 
 Changelog
 ---------
+- 0.7 Corrected a bug where datetime.max.time() resulted in incorrect date/time. Changed tests to compare time_override models via string to prevent future regressions. Added choices ``GROUPED_ALL_TIMEZONES_CHOICES`` and ``GROUPED_COMMON_TIMEZONES_CHOICES``.
 - 0.6 Added RTD documentation. LinkedTZDateTimeField now returns the datetime object in the overidden timezone and time.
 - 0.5 Bug fix: time override on datetime.min.time() failed to set time properly
 - 0.4 Removed support for Python 2.5
