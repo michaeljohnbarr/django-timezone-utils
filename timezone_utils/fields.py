@@ -320,6 +320,11 @@ class LinkedTZDateTimeField(with_metaclass(SubfieldBase, DateTimeField)):
             # Retrieve the time override
             time_override = self._get_time_override()
 
+            # Convert the value to the correct timezone prior to applying the
+            #   time_override
+            if not value.tzinfo == tz:
+                value = value.astimezone(tz)
+
             # Convert the value to the date/time
             value = datetime.combine(
                 date=value.date(),

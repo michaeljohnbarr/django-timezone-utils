@@ -57,6 +57,78 @@ Contains constants and functions to generate model/form choices for time zones.
         ...
     )
 
+``GROUPED_ALL_TIMEZONES_CHOICES``
+---------------------------------
+.. py:data:: GROUPED_ALL_TIMEZONES_CHOICES
+
+    Returns choices grouped by the timezone offset and ordered alphabetically by
+    their Olson Time Zone name populated from |pytz.all_timezones|_.
+
+.. code-block:: python
+
+    >>> from timezone_utils.choices import GROUPED_ALL_TIMEZONES_CHOICES
+    >>> print GROUPED_ALL_TIMEZONES_CHOICES
+    (
+        (
+            'GMT-12:00',
+            (
+                ('Etc/GMT+12', 'Etc/GMT+12'),
+            )
+        ),
+        (
+            'GMT-11:00',
+            (
+                ('Etc/GMT+11', 'Etc/GMT+11'),
+                ('Pacific/Midway', 'Pacific/Midway'),
+                ('Pacific/Niue', 'Pacific/Niue'),
+                ('Pacific/Pago_Pago', 'Pacific/Pago_Pago'),
+                ('Pacific/Samoa', 'Pacific/Samoa'),
+                ('US/Samoa', 'US/Samoa')
+            )
+        ),
+        ...
+    )
+
+``GROUPED_COMMON_TIMEZONES_CHOICES``
+------------------------------------
+.. py:data:: GROUPED_COMMON_TIMEZONES_CHOICES
+
+    Returns choices grouped by the timezone offset and ordered alphabetically by
+    their Olson Time Zone name populated from |pytz.common_timezones|_.
+
+.. code-block:: python
+
+    >>> from timezone_utils.choices import GROUPED_ALL_TIMEZONES_CHOICES
+    >>> print GROUPED_ALL_TIMEZONES_CHOICES
+    (
+        (
+            'GMT-11:00',
+            (
+                ('Pacific/Midway', 'Pacific/Midway'),
+                ('Pacific/Niue', 'Pacific/Niue'),
+                ('Pacific/Pago_Pago', 'Pacific/Pago_Pago')
+            )
+        ),
+        (
+            'GMT-10:00',
+            (
+                ('America/Adak', 'America/Adak'),
+                ('Pacific/Honolulu', 'Pacific/Honolulu'),
+                ('Pacific/Johnston', 'Pacific/Johnston'),
+                ('Pacific/Rarotonga', 'Pacific/Rarotonga'),
+                ('Pacific/Tahiti', 'Pacific/Tahiti'),
+                ('US/Hawaii', 'US/Hawaii')
+            )
+        ),
+        (
+            'GMT-09:30',
+            (
+                ('Pacific/Marquesas', 'Pacific/Marquesas'),
+            )
+        ),
+        ...
+    )
+
 ``PRETTY_ALL_TIMEZONES_CHOICES``
 --------------------------------
 .. py:data:: PRETTY_ALL_TIMEZONES_CHOICES
@@ -107,14 +179,16 @@ Contains constants and functions to generate model/form choices for time zones.
         ...
     )
 
-``get_choices(timezones)``
---------------------------
-.. py:function:: get_choices(timezones)
+``get_choices(timezones, grouped=False)``
+-----------------------------------------
+.. py:function:: get_choices(timezones, grouped=False)
 
         Retrieves timezone choices from any iterable (normally from `pytz <pytz.sourceforge.net/>`_).
 
         :param timezones: Any iterable that contains valid Olson Time Zone strings.
         :type timezones: iterable
+        :param grouped: Whether to group the choices by time zone offset.
+        :type grouped: bool
         :return: A tuple containing tuples of time zone choices.
         :rtype: tuple
         :raises pytz.exceptions.UnknownTimeZoneError: if the string from the iterable ``timezones``
