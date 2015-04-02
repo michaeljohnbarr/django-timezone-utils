@@ -8,6 +8,7 @@ import pytz
 # Django
 from django.core.exceptions import ValidationError
 from django.forms import CharField
+from django.utils.encoding import force_text
 from django.utils.translation import ugettext_lazy as _
 
 __all__ = ('TimeZoneField', )
@@ -20,6 +21,9 @@ class TimeZoneField(CharField):
     default_error_messages = {
         'invalid': _("'%(value)s' is not a valid time zone."),
     }
+
+    def run_validators(self, value):
+        return super(TimeZoneField, self).run_validators(force_text(value))
 
     def to_python(self, value):
         value = super(TimeZoneField, self).to_python(value)
