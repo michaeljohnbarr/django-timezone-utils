@@ -21,7 +21,7 @@ setup(
     packages=['timezone_utils'],
     install_requires=[
         'pytz',
-        'django>=1.4,<1.8'
+        'django>=1.4,<1.9'
     ],
     zip_safe=False,
     platforms='any',
