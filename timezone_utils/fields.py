@@ -8,12 +8,13 @@ import pytz
 import warnings
 
 # Django
+import django
 try:
     from django.core import checks
 except ImportError:     # pragma: no cover
     pass
 from django.core.exceptions import ValidationError
-from django.db.models import SubfieldBase
+from django.db import models
 from django.db.models.fields import DateTimeField, CharField
 from django.utils.six import with_metaclass
 from django.utils.timezone import get_default_timezone, is_naive, make_aware
@@ -22,13 +23,16 @@ from django.utils.translation import ugettext_lazy as _
 # App
 from timezone_utils import forms
 
+
+TimeZoneFieldBase = type if django.VERSION >= (1, 8) else models.SubfieldBase
+
 __all__ = ('TimeZoneField', 'LinkedTZDateTimeField')
 
 
 # ==============================================================================
 # MODEL FIELDS
 # ==============================================================================
-class TimeZoneField(with_metaclass(SubfieldBase, CharField)):
+class TimeZoneField(with_metaclass(TimeZoneFieldBase, CharField)):
     # Enforce the minimum length of max_length to be the length of the longest
     #   pytz timezone string
     MIN_LENGTH = max(map(len, pytz.all_timezones))
@@ -58,16 +62,43 @@ class TimeZoneField(with_metaclass(SubfieldBase, CharField)):
 
         super(TimeZoneField, self).__init__(*args, **kwargs)
 
+    def validate(self, value, model_instance):
+        """
+        Validates value and throws ValidationError. Subclasses should override
+        this to provide validation logic.
+        """
+        super(TimeZoneField, self).validate(
+            value=self.get_prep_value(value),
+            model_instance=model_instance
+        )
+
+        # Insure the value is can be converted to a timezone
+        self.to_python(value)
+
+    def run_validators(self, value):
+        super(TimeZoneField, self).run_validators(self.get_prep_value(value))
+
     def get_prep_value(self, value):
         """Converts timezone instances to strings for db storage."""
+        value = super(TimeZoneField, self).get_prep_value(value)
 
         if isinstance(value, tzinfo):
             return value.zone
+
+        return value
+
+    def from_db_value(self, value, expression, connection, context):    # noqa
+        """
+        Converts a value as returned by the database to a Python object. It is
+        the reverse of get_prep_value(). - New in Django 1.8
+        """
+        if value:
+            value = self.to_python(value)
+
         return value
 
     def to_python(self, value):
         """Returns a datetime.tzinfo instance for the value."""
-
         value = super(TimeZoneField, self).to_python(value)
 
         if not value:
@@ -190,13 +221,18 @@ class TimeZoneField(with_metaclass(SubfieldBase, CharField)):
         return []
 
 
-class LinkedTZDateTimeField(with_metaclass(SubfieldBase, DateTimeField)):
+class LinkedTZDateTimeField(with_metaclass(TimeZoneFieldBase, DateTimeField)):
     def __init__(self, *args, **kwargs):
         self.populate_from = kwargs.pop('populate_from', None)
         self.time_override = kwargs.pop('time_override', None)
         self.timezone = get_default_timezone()
 
         super(LinkedTZDateTimeField, self).__init__(*args, **kwargs)
+
+    def from_db_value(self, value, expression, connection, context):  # noqa
+        if value:
+            value = self.to_python(value)
+        return value
 
     def to_python(self, value):
         """Convert the value to the appropriate timezone."""
@@ -205,9 +241,6 @@ class LinkedTZDateTimeField(with_metaclass(SubfieldBase, DateTimeField)):
 
         if not value:
             return value
-
-        if is_naive(value):
-            return make_aware(value=value, timezone=self.timezone)
 
         return value.astimezone(self.timezone)
 
@@ -314,6 +347,9 @@ class LinkedTZDateTimeField(with_metaclass(SubfieldBase, DateTimeField)):
         # If populate_from exists, override the default timezone
         if self.populate_from is not None:
             tz = self._get_populate_from(model_instance)
+
+        if is_naive(value):
+            value = make_aware(value=value, timezone=tz)
 
         # Convert the value to a datetime object in the correct timezone. This
         # insures that we will have the correct date if we are performing a time

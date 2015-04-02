@@ -48,6 +48,7 @@ class TimeZoneFieldTestCase(TestCase):
         location = LocationTimeZone.objects.get(timezone='US/Eastern')
         with self.assertRaises(ValidationError):
             location.timezone = 'Bad/Timezone'
+            location.save()
 
     def test_location_is_equals_correct_timezone(self):
         """Location should return a datetime.tzinfo instance, not a string."""
