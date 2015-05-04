@@ -206,6 +206,9 @@ class LinkedTZDateTimeField(with_metaclass(SubfieldBase, DateTimeField)):
         if not value:
             return value
 
+        if is_naive(value):
+            return make_aware(value=value, timezone=self.timezone)
+
         return value.astimezone(self.timezone)
 
     def pre_save(self, model_instance, add):
@@ -312,6 +315,11 @@ class LinkedTZDateTimeField(with_metaclass(SubfieldBase, DateTimeField)):
         if self.populate_from is not None:
             tz = self._get_populate_from(model_instance)
 
+        # Convert the value to a datetime object in the correct timezone. This
+        # insures that we will have the correct date if we are performing a time
+        #   override below.
+        value = value.astimezone(tz)
+
         # Do not convert the time to the time override if auto_now or
         #   auto_now_add is set
         if self.time_override is not None and not (
@@ -320,24 +328,13 @@ class LinkedTZDateTimeField(with_metaclass(SubfieldBase, DateTimeField)):
             # Retrieve the time override
             time_override = self._get_time_override()
 
-            # Convert the value to the correct timezone prior to applying the
-            #   time_override
-            if not value.tzinfo == tz:
-                value = value.astimezone(tz)
-
-            # Convert the value to the date/time
-            value = datetime.combine(
-                date=value.date(),
-                time=time_override
+            # Convert the value to the date/time with the appropriate timezone
+            value = make_aware(
+                value=datetime.combine(
+                    date=value.date(),
+                    time=time_override
+                ),
+                timezone=tz
             )
-
-        # If the value is naive (due to the time_override conversion), make it
-        #   aware based on the appropriate timezone
-        if is_naive(value):
-            value = make_aware(value=value, timezone=tz)
-
-        # Set the value to the correct timezone
-        if not value.tzinfo == tz:
-            value = value.astimezone(tz)
 
         return value

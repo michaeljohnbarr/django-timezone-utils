@@ -107,6 +107,7 @@ Contributors
 
 Changelog
 ---------
+- 0.9 Corrected a bug to where ``time_override`` caused invalid date due to not converting to the correct timezone first. Refactored conversion code. Added testing support for Django 1.8. Removed Django from setup requirements - the onus of having a supported version of Django is on the developer.
 - 0.8 Corrected a bug to where ``time_override`` caused invalid date due to not converting to the correct timezone first. Added choices ``GROUPED_ALL_TIMEZONES_CHOICES`` and ``GROUPED_COMMON_TIMEZONES_CHOICES`` to the documentation.
 - 0.7 Corrected a bug where datetime.max.time() resulted in incorrect date/time. Changed tests to compare time_override models via string to prevent future regressions. Added choices ``GROUPED_ALL_TIMEZONES_CHOICES`` and ``GROUPED_COMMON_TIMEZONES_CHOICES``.
 - 0.6 Added RTD documentation. LinkedTZDateTimeField now returns the datetime object in the overidden timezone and time.

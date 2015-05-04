@@ -32,7 +32,7 @@ class DateTimeWithTimeZoneFieldTestCase(TestCase):
         location = TZWithGoodStringDefault.objects.create()
         ModelWithForeignKeyToTimeZone.objects.create(other_model=location)
         TZTimeFramedModel.objects.create(
-            start=make_aware(datetime(2014, 1, 1), pytz.timezone('US/Eastern')),
+            start=datetime(2014, 1, 1),
             end=make_aware(datetime(2014, 12, 31), pytz.timezone('US/Eastern')),
             other_model=location
         )
