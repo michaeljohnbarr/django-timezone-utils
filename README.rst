@@ -104,6 +104,7 @@ Contributors
 ------------
 
 * `Michael Barr <http://github.com/michaeljohnbarr>`_
+* `Kosei Kitahara <https://github.com/Surgo>`_
 
 Changelog
 ---------
