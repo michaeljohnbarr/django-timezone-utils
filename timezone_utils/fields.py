@@ -32,9 +32,9 @@ __all__ = ('TimeZoneField', 'LinkedTZDateTimeField')
 # ==============================================================================
 # MODEL FIELDS
 # ==============================================================================
-class TimeZoneField(
+class TimeZoneField(    # pylint: disable=E0239
     with_metaclass(TimeZoneFieldBase, CharField)
-):  # pylint: disable=E0239
+):
     # Enforce the minimum length of max_length to be the length of the longest
     #   pytz timezone string
     MIN_LENGTH = max(map(len, pytz.all_timezones))
