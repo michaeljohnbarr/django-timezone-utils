@@ -32,8 +32,9 @@ __all__ = ('TimeZoneField', 'LinkedTZDateTimeField')
 # ==============================================================================
 # MODEL FIELDS
 # ==============================================================================
-# pylint: disable=E0239
-class TimeZoneField(with_metaclass(TimeZoneFieldBase, CharField)):
+class TimeZoneField(
+    with_metaclass(TimeZoneFieldBase, CharField)
+):  # pylint: disable=E0239
     # Enforce the minimum length of max_length to be the length of the longest
     #   pytz timezone string
     MIN_LENGTH = max(map(len, pytz.all_timezones))
@@ -41,6 +42,7 @@ class TimeZoneField(with_metaclass(TimeZoneFieldBase, CharField)):
         'invalid': _("'%(value)s' is not a valid time zone."),
     }
 
+    # pylint: disable=newstyle
     def __init__(self, *args, **kwargs):
         # Retrieve the model field's declared max_length or default to pytz's
         #   maximum length
@@ -61,7 +63,6 @@ class TimeZoneField(with_metaclass(TimeZoneFieldBase, CharField)):
                 category=UserWarning,
             )
 
-        # pylint: disable=newstyle
         super(TimeZoneField, self).__init__(*args, **kwargs)
 
     def validate(self, value, model_instance):
@@ -119,6 +120,7 @@ class TimeZoneField(with_metaclass(TimeZoneFieldBase, CharField)):
                 params={'value': value}
             )
 
+    # pylint: disable=E0239
     def formfield(self, **kwargs):
         """Returns a custom form field for the TimeZoneField."""
 
@@ -129,6 +131,7 @@ class TimeZoneField(with_metaclass(TimeZoneFieldBase, CharField)):
     # --------------------------------------------------------------------------
     # Django >= 1.7 Checks Framework
     # --------------------------------------------------------------------------
+    # pylint: disable=E0239
     def check(self, **kwargs):  # pragma: no cover
         """Calls the TimeZoneField's custom checks."""
 
@@ -227,19 +230,23 @@ class TimeZoneField(with_metaclass(TimeZoneFieldBase, CharField)):
         return []
 
 
-# pylint: disable=E0239
-class LinkedTZDateTimeField(with_metaclass(TimeZoneFieldBase, DateTimeField)):
+class LinkedTZDateTimeField(
+    with_metaclass(TimeZoneFieldBase, DateTimeField)
+):  # pylint: disable=E0239
+    # pylint: disable=newstyle
     def __init__(self, *args, **kwargs):
         self.populate_from = kwargs.pop('populate_from', None)
         self.time_override = kwargs.pop('time_override', None)
         self.timezone = get_default_timezone()
 
-        # pylint: disable=newstyle
         super(LinkedTZDateTimeField, self).__init__(*args, **kwargs)
 
-    def from_db_value(self, value, expression, connection, context):  # noqa
+    def from_db_value(self, value, expression, connection, context):
+        # pylint: disable=W0613
         if value:
             value = self.to_python(value)
+
+
         return value
 
     def to_python(self, value):
@@ -283,7 +290,7 @@ class LinkedTZDateTimeField(with_metaclass(TimeZoneFieldBase, DateTimeField)):
 
     def deconstruct(self):  # pragma: no cover
         """Add our custom keyword arguments for migrations."""
-
+        # pylint: disable=newstyle
         name, path, args, kwargs = super(
             LinkedTZDateTimeField,
             self
