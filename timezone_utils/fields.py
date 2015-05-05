@@ -242,6 +242,9 @@ class LinkedTZDateTimeField(with_metaclass(TimeZoneFieldBase, DateTimeField)):
         if not value:
             return value
 
+        if is_naive(value):
+            return make_aware(value=value, timezone=self.timezone)
+
         return value.astimezone(self.timezone)
 
     def pre_save(self, model_instance, add):
