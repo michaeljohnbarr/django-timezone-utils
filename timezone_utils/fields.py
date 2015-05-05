@@ -32,6 +32,7 @@ __all__ = ('TimeZoneField', 'LinkedTZDateTimeField')
 # ==============================================================================
 # MODEL FIELDS
 # ==============================================================================
+# pylint: disable=E0239
 class TimeZoneField(with_metaclass(TimeZoneFieldBase, CharField)):
     # Enforce the minimum length of max_length to be the length of the longest
     #   pytz timezone string
@@ -60,6 +61,7 @@ class TimeZoneField(with_metaclass(TimeZoneFieldBase, CharField)):
                 category=UserWarning,
             )
 
+        # pylint: disable=newstyle
         super(TimeZoneField, self).__init__(*args, **kwargs)
 
     def validate(self, value, model_instance):
@@ -67,6 +69,7 @@ class TimeZoneField(with_metaclass(TimeZoneFieldBase, CharField)):
         Validates value and throws ValidationError. Subclasses should override
         this to provide validation logic.
         """
+        # pylint: disable=newstyle
         super(TimeZoneField, self).validate(
             value=self.get_prep_value(value),
             model_instance=model_instance
@@ -76,10 +79,12 @@ class TimeZoneField(with_metaclass(TimeZoneFieldBase, CharField)):
         self.to_python(value)
 
     def run_validators(self, value):
+        # pylint: disable=newstyle
         super(TimeZoneField, self).run_validators(self.get_prep_value(value))
 
     def get_prep_value(self, value):
         """Converts timezone instances to strings for db storage."""
+        # pylint: disable=newstyle
         value = super(TimeZoneField, self).get_prep_value(value)
 
         if isinstance(value, tzinfo):
@@ -99,6 +104,7 @@ class TimeZoneField(with_metaclass(TimeZoneFieldBase, CharField)):
 
     def to_python(self, value):
         """Returns a datetime.tzinfo instance for the value."""
+        # pylint: disable=newstyle
         value = super(TimeZoneField, self).to_python(value)
 
         if not value:
@@ -221,12 +227,14 @@ class TimeZoneField(with_metaclass(TimeZoneFieldBase, CharField)):
         return []
 
 
+# pylint: disable=E0239
 class LinkedTZDateTimeField(with_metaclass(TimeZoneFieldBase, DateTimeField)):
     def __init__(self, *args, **kwargs):
         self.populate_from = kwargs.pop('populate_from', None)
         self.time_override = kwargs.pop('time_override', None)
         self.timezone = get_default_timezone()
 
+        # pylint: disable=newstyle
         super(LinkedTZDateTimeField, self).__init__(*args, **kwargs)
 
     def from_db_value(self, value, expression, connection, context):  # noqa
@@ -236,7 +244,7 @@ class LinkedTZDateTimeField(with_metaclass(TimeZoneFieldBase, DateTimeField)):
 
     def to_python(self, value):
         """Convert the value to the appropriate timezone."""
-
+        # pylint: disable=newstyle
         value = super(LinkedTZDateTimeField, self).to_python(value)
 
         if not value:
@@ -252,7 +260,7 @@ class LinkedTZDateTimeField(with_metaclass(TimeZoneFieldBase, DateTimeField)):
         Converts the value being saved based on `populate_from` and
         `time_override`
         """
-
+        # pylint: disable=newstyle
         # Retrieve the currently entered datetime
         value = super(
             LinkedTZDateTimeField,
