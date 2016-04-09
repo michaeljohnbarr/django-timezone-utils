@@ -32,7 +32,7 @@ class TimeZoneField(CharField):
             return value
 
         try:
-            pytz.timezone(str(value))
+            return pytz.timezone(str(value))
         except pytz.UnknownTimeZoneError:
             raise ValidationError(
                 message=self.error_messages['invalid'],
