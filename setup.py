@@ -21,7 +21,7 @@ setup(
     packages=['timezone_utils'],
     install_requires=[
         'pytz',
-        'django>=1.4,<1.9'
+        'django>=1.4,<1.10'
     ],
     zip_safe=False,
     platforms='any',
@@ -41,6 +41,7 @@ setup(
         'Programming Language :: Python :: 3.2',
         'Programming Language :: Python :: 3.3',
         'Programming Language :: Python :: 3.4',
+        'Programming Language :: Python :: 3.5',
         'Topic :: Database',
         'Topic :: Software Development :: Libraries',
     ],
