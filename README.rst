@@ -1,7 +1,7 @@
 Django Timezone Utils: Time Zone Utilities For Models
 =====================================================
 
-.. image:: https://pypip.in/version/django-timezone-utils/badge.svg?style=flat&text=version
+.. image:: https://img.shields.io/pypi/v/django-timezone-utils.svg?maxAge=2592000
     :target: https://pypi.python.org/pypi/django-timezone-utils/
     :alt: Latest Version
 
@@ -17,15 +17,15 @@ Django Timezone Utils: Time Zone Utilities For Models
     :target: https://landscape.io/github/michaeljohnbarr/django-timezone-utils
     :alt: Code Health
 
-.. image:: https://pypip.in/py_versions/django-timezone-utils/badge.svg?style=flat
+.. image:: https://img.shields.io/pypi/pyversions/django-timezone-utils.svg?maxAge=2592000
     :target: https://pypi.python.org/pypi/django-timezone-utils/
     :alt: Supported Python versions
 
-.. image:: https://pypip.in/license/django-timezone-utils/badge.svg?style=flat
+.. image:: https://img.shields.io/pypi/l/django-timezone-utils.svg?maxAge=2592000
     :target: https://pypi.python.org/pypi/django-timezone-utils/
     :alt: License
 
-.. image:: https://pypip.in/status/django-timezone-utils/badge.svg?style=flat
+.. image:: https://img.shields.io/pypi/status/django-timezone-utils.svg?maxAge=2592000
     :target: https://pypi.python.org/pypi/django-timezone-utils/
     :alt: Development Status
 
