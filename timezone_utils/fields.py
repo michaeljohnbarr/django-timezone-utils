@@ -1,6 +1,6 @@
-# ==============================================================================
+# =============================================================================
 # IMPORTS
-# ==============================================================================
+# =============================================================================
 # Python
 from __future__ import unicode_literals
 from datetime import datetime, tzinfo, time as datetime_time
@@ -8,15 +8,9 @@ import pytz
 import warnings
 
 # Django
-import django
-try:
-    from django.core import checks
-except ImportError:     # pragma: no cover
-    pass
+from django.core import checks
 from django.core.exceptions import ValidationError
-from django.db import models
 from django.db.models.fields import DateTimeField, CharField
-from django.utils.six import with_metaclass
 from django.utils.timezone import get_default_timezone, is_naive, make_aware
 from django.utils.translation import ugettext_lazy as _
 
@@ -24,17 +18,13 @@ from django.utils.translation import ugettext_lazy as _
 from timezone_utils import forms
 
 
-TimeZoneFieldBase = type if django.VERSION >= (1, 8) else models.SubfieldBase
-
 __all__ = ('TimeZoneField', 'LinkedTZDateTimeField')
 
 
-# ==============================================================================
+# =============================================================================
 # MODEL FIELDS
-# ==============================================================================
-class TimeZoneField(    # pylint: disable=E0239
-    with_metaclass(TimeZoneFieldBase, CharField)
-):
+# =============================================================================
+class TimeZoneField(CharField):
     # Enforce the minimum length of max_length to be the length of the longest
     #   pytz timezone string
     MIN_LENGTH = max(map(len, pytz.all_timezones))
@@ -128,9 +118,9 @@ class TimeZoneField(    # pylint: disable=E0239
         defaults.update(**kwargs)
         return super(TimeZoneField, self).formfield(**defaults)
 
-    # --------------------------------------------------------------------------
-    # Django >= 1.7 Checks Framework
-    # --------------------------------------------------------------------------
+    # -------------------------------------------------------------------------
+    # Django Checks Framework
+    # -------------------------------------------------------------------------
     # pylint: disable=E0239
     def check(self, **kwargs):  # pragma: no cover
         """Calls the TimeZoneField's custom checks."""
@@ -142,8 +132,8 @@ class TimeZoneField(    # pylint: disable=E0239
 
     def _check_timezone_max_length_attribute(self):     # pragma: no cover
         """
-        Checks that the `max_length` attribute covers all possible pytz timezone
-        lengths.
+        Checks that the `max_length` attribute covers all possible pytz
+        timezone lengths.
         """
 
         # Retrieve the maximum possible length for the time zone string
@@ -155,14 +145,14 @@ class TimeZoneField(    # pylint: disable=E0239
             return [
                 checks.Error(
                     msg=(
-                        "'max_length' is too short to support all possible pytz"
-                        " time zones."
+                        "'max_length' is too short to support all possible "
+                        "pytz time zones."
                     ),
                     hint=(
-                        "pytz {version}'s longest time zone string has a length"
-                        " of {value}, although it is recommended that you leave"
-                        " room for longer time zone strings to be added in the "
-                        "future.".format(
+                        "pytz {version}'s longest time zone string has a "
+                        "length of {value}, although it is recommended that "
+                        "you leave room for longer time zone strings to be "
+                        "added in the future.".format(
                             version=pytz.VERSION,
                             value=possible_max_length
                         )
@@ -230,9 +220,7 @@ class TimeZoneField(    # pylint: disable=E0239
         return []
 
 
-class LinkedTZDateTimeField(
-    with_metaclass(TimeZoneFieldBase, DateTimeField)
-):  # pylint: disable=E0239
+class LinkedTZDateTimeField(DateTimeField):
     # pylint: disable=newstyle
     def __init__(self, *args, **kwargs):
         self.populate_from = kwargs.pop('populate_from', None)
@@ -245,7 +233,6 @@ class LinkedTZDateTimeField(
         # pylint: disable=W0613
         if value:
             value = self.to_python(value)
-
 
         return value
 
@@ -298,9 +285,9 @@ class LinkedTZDateTimeField(
 
         # Only include kwarg if it's not the default
         if self.populate_from is not None:
-            # Since populate_from requires a model instance and Django does not,
-            #   allow lambda, we hope that we have been provided a function that
-            #   can be parsed
+            # Since populate_from requires a model instance and Django does
+            #   not allow lambda, we hope that we have been provided a
+            #   function that can be parsed
             kwargs['populate_from'] = self.populate_from
 
         # Only include kwarg if it's not the default
@@ -314,7 +301,9 @@ class LinkedTZDateTimeField(
         return name, path, args, kwargs
 
     def _get_populate_from(self, model_instance):
-        """Retrieves the timezone or None from the `populate_from` attribute."""
+        """
+        Retrieves the timezone or None from the `populate_from` attribute.
+        """
 
         if hasattr(self.populate_from, '__call__'):
             tz = self.populate_from(model_instance)
@@ -370,8 +359,8 @@ class LinkedTZDateTimeField(
             value = make_aware(value=value, timezone=tz)
 
         # Convert the value to a datetime object in the correct timezone. This
-        # insures that we will have the correct date if we are performing a time
-        #   override below.
+        #   insures that we will have the correct date if we are performing a
+        #   time override below.
         value = value.astimezone(tz)
 
         # Do not convert the time to the time override if auto_now or

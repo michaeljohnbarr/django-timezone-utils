@@ -51,7 +51,7 @@ ever had to deal with this, you will know how complicated this can be.
 
 I created these fields to ease the process of manipulating times based on
 another field's or models timezone choice. Instead of having to remember to use
-``Model.clean_fields``, we can now create the models with the validation built
+``Model.clean``, we can now create the models with the validation built
 into the model field.
 
 
@@ -108,6 +108,7 @@ Contributors
 
 Changelog
 ---------
+- 0.11 Removed reference to django.db.models.fields.subclassing.SubfieldBase, which means that only Django 1.8+ is now supported. Removed support for Python versions < 2.6. The Django 1.6 series was the last to support Python 2.6. Added testing support for Django 1.10. Changed development status from Beta to Production/Stable.
 - 0.10 Added testing support for Python 3.5 and Django 1.9.
 - 0.9 Corrected a bug to where ``time_override`` caused invalid date due to not converting to the correct timezone first. Refactored conversion code. Added testing support for Django 1.8. Removed Django from setup requirements - the onus of having a supported version of Django is on the developer.
 - 0.8 Corrected a bug to where ``time_override`` caused invalid date due to not converting to the correct timezone first. Added choices ``GROUPED_ALL_TIMEZONES_CHOICES`` and ``GROUPED_COMMON_TIMEZONES_CHOICES`` to the documentation.
