@@ -3,6 +3,9 @@ language:
 
 python:
   - "2.7"
+  # https://docs.djangoproject.com/en/dev/releases/1.8/#python-compatibility
+  # Due to the end of upstream support for Python 3.2 in February 2016, we
+  # won’t test Django 1.8.x on Python 3.2 after the end of 2016.
   - "3.2"
   - "3.3"
   - "3.4"
@@ -33,14 +36,26 @@ notifications:
 
 matrix:
   exclude:
+    # https://docs.djangoproject.com/en/dev/releases/1.9/#python-compatibility
+    # Django 1.9 requires Python 2.7, 3.4, or 3.5
     - python: "3.2"
       env: DJANGO="django>=1.9,<1.10"
     - python: "3.3"
       env: DJANGO="django>=1.9,<1.10"
+    # https://docs.djangoproject.com/en/dev/releases/1.10/#python-compatibility
+    # Django 1.10 requires Python 2.7, 3.4, or 3.5
     - python: "3.2"
       env: DJANGO="django>=1.10,<1.11"
     - python: "3.3"
       env: DJANGO="django>=1.10,<1.11"
+    # https://docs.djangoproject.com/en/dev/releases/1.11/#python-compatibility
+    # Django 1.11 requires Python 2.7, 3.4, or 3.5.
+    # The Django 1.11.x series is the last to support Python 2.
+    # The next major release, Django 2.0, will only support Python 3.5+
+    - python: "3.2"
+      env: DJANGO="https://github.com/django/django/archive/master.tar.gz"
+    - python: "3.3"
+      env: DJANGO="https://github.com/django/django/archive/master.tar.gz"
   allow_failures:
     - env: DJANGO="https://github.com/django/django/archive/master.tar.gz"
     - python: "nightly"
