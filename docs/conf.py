@@ -44,7 +44,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'Django Timezone Utils'
-copyright = u'2015, Michael Barr'
+copyright = u'2016, Michael Barr'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
