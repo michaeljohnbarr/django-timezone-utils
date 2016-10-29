@@ -33,8 +33,7 @@ Django Timezone Utils: Time Zone Utilities For Models
 **django-timezone-utils** adds automatic time zone conversions and support
 utilities to Django.
 
-Please note that this project is currently marked as a development status of
-*Beta*. Suggestions, constructive criticism, and feedback are certainly
+Suggestions, constructive criticism, and feedback are certainly
 welcomed and appreciated.
 
 Documentation
