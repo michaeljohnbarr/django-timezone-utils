@@ -17,7 +17,7 @@ modify your ``INSTALLED_APPS`` setting.
 Dependencies
 ============
 
-* Supports `Django`_ 1.4+ on Python 2.6, 2.7, 3.2, 3.3, and 3.4.
+* Supports `Django`_ 1.8+ on Python 2.7, 3.2, 3.3, 3.4, and 3.5.
 * Requires `pytz`_ for time zone conversions.
 
 .. _Django: http://www.djangoproject.com/

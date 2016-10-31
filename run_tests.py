@@ -43,13 +43,10 @@ if not settings.configured:
         TIME_ZONE='UTC',
         SECRET_KEY='secret',
         LANGUAGE_CODE = 'en-us',
-        # TIME_ZONE = 'UTC',
-        USE_I18N = True,
-        USE_L10N = True,
-        # USE_TZ = True,
-
-        SITE_ID = 1,
-        TEST_DATETIME = timezone.make_aware(
+        USE_I18N=True,
+        USE_L10N=True,
+        SITE_ID=1,
+        TEST_DATETIME=timezone.make_aware(
             datetime(2014, 1, 1), pytz.timezone('UTC')
         ),
         # SILENCED_SYSTEM_CHECKS=['1_7.W001'],
