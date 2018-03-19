@@ -195,10 +195,11 @@ class TimeZoneField(CharField):
                                     )
                                 })
 
-                            # Return the warning
-                            return [
-                                checks.Warning(**warning_params)
-                            ]
+                                # Return the warning
+                                return [
+                                    checks.Warning(**warning_params)
+                                ]
+
                 elif option_key not in pytz.all_timezones:
                     # Make sure we don't raise this error on empty
                     #   values
@@ -211,10 +212,10 @@ class TimeZoneField(CharField):
                             )
                         })
 
-                    # Return the warning
-                    return [
-                        checks.Warning(**warning_params)
-                    ]
+                        # Return the warning
+                        return [
+                            checks.Warning(**warning_params)
+                        ]
 
         # When no error, return an empty list
         return []
