@@ -9,3 +9,4 @@ docs/locale/
 build/
 .idea
 .coverage
+.tox
