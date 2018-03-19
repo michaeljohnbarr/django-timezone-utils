@@ -142,7 +142,8 @@ def get_other_model_timezone(obj):
 class ModelWithForeignKeyToTimeZone(models.Model):
     other_model = models.ForeignKey(
         to='tests.TZWithGoodStringDefault',
-        related_name='fk_to_tz'
+        related_name='fk_to_tz',
+        on_delete=models.CASCADE,
     )
     timestamp = LinkedTZDateTimeField(
         default=settings.TEST_DATETIME,
@@ -169,7 +170,8 @@ class ModelWithLocalTZCharField(models.Model):
 class TZTimeFramedModel(models.Model):
     other_model = models.ForeignKey(
         to='tests.TZWithGoodStringDefault',
-        related_name='fk_to_tz_too'
+        related_name='fk_to_tz_too',
+        on_delete=models.CASCADE,
     )
     start = LinkedTZDateTimeField(
         default=settings.TEST_DATETIME,
