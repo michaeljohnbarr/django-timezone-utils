@@ -8,9 +8,11 @@ import pytz
 import re
 
 # Django
+from django.core import checks
 from django.test import TestCase
 
 # App
+from tests import models
 from timezone_utils.choices import (ALL_TIMEZONES_CHOICES,
                                     COMMON_TIMEZONES_CHOICES,
                                     GROUPED_ALL_TIMEZONES_CHOICES,
@@ -170,3 +172,21 @@ class TimeZoneChoicesTestCase(TestCase):
         values = map(itemgetter(0), choices)
         for value in values:
             self.assertIn(value, pytz.all_timezones)
+
+    def test_check_choices_attribute_good(self):
+        self.assertEqual(models.LocationTimeZoneChoices.check(), [])
+        # Don't warn for empty values:
+        self.assertEqual(models.LocationTimeZoneChoicesWithEmpty.check(), [])
+
+    def test_check_choices_attribute_bad(self):
+        self.assertEqual(models.LocationTimeZoneBadChoices.check(), [
+            checks.Warning(
+                msg=(
+                    "'choices' contains an invalid time zone value 'Bad/Worse' "
+                    "which was not found as a supported time zone by pytz "
+                    "{version}.".format(version=pytz.__version__)
+                ),
+                hint='Values must be found in pytz.all_timezones.',
+                obj=models.LocationTimeZoneBadChoices._meta.get_field('timezone'),
+            ),
+        ])

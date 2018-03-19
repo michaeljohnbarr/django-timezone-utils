@@ -84,6 +84,26 @@ class LocationTimeZoneChoices(models.Model):
     )
 
 
+class LocationTimeZoneChoicesWithEmpty(models.Model):
+    timezone = TimeZoneField(
+        verbose_name=_('timezone'),
+        max_length=64,
+        null=True,
+        blank=True,
+        choices=[('', 'No time zone')] + list(PRETTY_ALL_TIMEZONES_CHOICES),
+    )
+
+
+class LocationTimeZoneBadChoices(models.Model):
+    timezone = TimeZoneField(
+        verbose_name=_('timezone'),
+        max_length=64,
+        null=True,
+        blank=True,
+        choices=[('Bad/Worse', 'Bad Choice')],
+    )
+
+
 class TZWithGoodStringDefault(models.Model):
     """Test should validate that"""
     timezone = TimeZoneField(
