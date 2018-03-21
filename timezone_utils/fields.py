@@ -8,6 +8,7 @@ import pytz
 import warnings
 
 # Django
+import django
 from django.core import checks
 from django.core.exceptions import ValidationError
 from django.db.models.fields import DateTimeField, CharField
@@ -83,15 +84,26 @@ class TimeZoneField(CharField):
 
         return value
 
-    def from_db_value(self, value, expression, connection, context):    # noqa
-        """
-        Converts a value as returned by the database to a Python object. It is
-        the reverse of get_prep_value(). - New in Django 1.8
-        """
-        if value:
-            value = self.to_python(value)
-
-        return value
+    # Django 2.0 updates the signature of from_db_value.
+    # https://docs.djangoproject.com/en/2.0/releases/2.0/#context-argument-of-field-from-db-value-and-expression-convert-value
+    if django.VERSION < (2,):
+        def from_db_value(self, value, expression, connection, context):    # noqa
+            """
+            Converts a value as returned by the database to a Python object. It is
+            the reverse of get_prep_value(). - New in Django 1.8
+            """
+            if value:
+                value = self.to_python(value)
+            return value
+    else:
+        def from_db_value(self, value, expression, connection):
+            """
+            Converts a value as returned by the database to a Python object. It is
+            the reverse of get_prep_value(). - New in Django 1.8
+            """
+            if value:
+                value = self.to_python(value)
+            return value
 
     def to_python(self, value):
         """Returns a datetime.tzinfo instance for the value."""
