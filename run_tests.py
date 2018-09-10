@@ -7,7 +7,6 @@ import pytz
 import sys
 
 # Django
-from django import VERSION
 from django.conf import settings
 from django.core.management import execute_from_command_line
 from django.utils import timezone
@@ -21,11 +20,6 @@ INSTALLED_APPS = [
 
 if not settings.configured:
     test_runners_args = {}
-    if VERSION < (1, 6):    # pragma: no cover
-        INSTALLED_APPS.append('discover_runner')
-        test_runners_args = {
-            'TEST_RUNNER': 'discover_runner.DiscoverRunner',
-        }
     settings.configure(
         DATABASES={
             'default': {
@@ -50,7 +44,6 @@ if not settings.configured:
             datetime(2014, 1, 1), pytz.timezone('UTC')
         ),
         # SILENCED_SYSTEM_CHECKS=['1_7.W001'],
-        **test_runners_args
     )
 
 
