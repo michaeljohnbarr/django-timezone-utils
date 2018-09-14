@@ -105,6 +105,7 @@ Contributors
 * `Michael Barr <http://github.com/michaeljohnbarr>`_
 * `Kosei Kitahara <https://github.com/Surgo>`_
 * `Alex Kamedov <https://github.com/alekam>`_
+* `Pi Delport <https://github.com/pjdelport>`_
 
 Changelog
 ---------
