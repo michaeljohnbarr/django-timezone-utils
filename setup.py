@@ -21,14 +21,18 @@ setup(
     packages=['timezone_utils'],
     install_requires=[
         'pytz',
-        'django>=1.8'
+        'django>=1.11'
     ],
     zip_safe=False,
     platforms='any',
     include_package_data=True,
     classifiers=[
         'Development Status :: 5 - Production/Stable',
+        'Environment :: Web Environment',
         'Framework :: Django',
+        'Framework :: Django :: 1.11',
+        'Framework :: Django :: 2.0',
+        'Framework :: Django :: 2.1',
         'Intended Audience :: Developers',
         'License :: OSI Approved :: MIT License',
         'Natural Language :: English',
@@ -37,10 +41,10 @@ setup(
         'Programming Language :: Python :: 2',
         'Programming Language :: Python :: 2.7',
         'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.2',
-        'Programming Language :: Python :: 3.3',
         'Programming Language :: Python :: 3.4',
         'Programming Language :: Python :: 3.5',
+        'Programming Language :: Python :: 3.6',
+        'Programming Language :: Python :: 3.7',
         'Topic :: Database',
         'Topic :: Software Development :: Libraries',
     ],

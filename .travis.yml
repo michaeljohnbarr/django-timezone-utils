@@ -1,69 +1,53 @@
-language:
-  python
-
-python:
-  - "2.7"
-  # https://docs.djangoproject.com/en/dev/releases/1.8/#python-compatibility
-  # Due to the end of upstream support for Python 3.2 in February 2016, we
-  # won’t test Django 1.8.x on Python 3.2 after the end of 2016.
-  - "3.2"
-  - "3.3"
-  - "3.4"
-  - "3.5"
-  - "nightly"
-
-env:
-  - DJANGO="https://github.com/django/django/archive/master.tar.gz"
-  - DJANGO="django>=2.0,<2.1"
-  - DJANGO="django>=1.10,<1.11"
-  - DJANGO="django>=1.9,<1.10"
-  - DJANGO="django>=1.8,<1.9"
-
+sudo: false
+language: python
+cache:
+  pip: true
+  directories:
+  - $TRAVIS_BUILD_DIR/.tox
+matrix:
+  fast_finish: true
+  include:
+  - env: TOX_ENV=py27-dj111
+    python: 2.7
+  - env: TOX_ENV=py34-dj111
+    python: 3.4
+  - env: TOX_ENV=py35-dj111
+    python: 3.5
+  - env: TOX_ENV=py36-dj111
+    python: 3.6
+  - env: TOX_ENV=py34-dj20
+    python: 3.4
+  - env: TOX_ENV=py35-dj20
+    python: 3.5
+  - env: TOX_ENV=py36-dj20
+    python: 3.6
+  - env: TOX_ENV=py37-dj20
+    sudo: true  # TODO Remove when supported
+    dist: xenial
+    python: 3.7
+  - env: TOX_ENV=py35-dj21
+    python: 3.5
+  - env: TOX_ENV=py36-dj21
+    python: 3.6
+  - env: TOX_ENV=py37-dj21
+    sudo: true  # TODO Remove when supported
+    dist: xenial
+    python: 3.7
+  - env: TOX_ENV=py35-djmaster
+    python: 3.5
+  - env: TOX_ENV=py36-djmaster
+    python: 3.6
+  - env: TOX_ENV=py37-djmaster
+    sudo: true  # TODO Remove when supported
+    dist: xenial
+    python: 3.7
+  allow_failures:
+  - env: TOX_ENV=py35-djmaster
+  - env: TOX_ENV=py36-djmaster
+  - env: TOX_ENV=py37-djmaster
 install:
-  - travis_retry pip install $DJANGO
-  - travis_retry pip install pytz
-  - travis_retry pip install coverage==3.7.1  # required by python 3.2
-  - travis_retry pip install coveralls
-  - travis_retry pip install django-discover-runner
-
+- pip install -U pip setuptools tox wheel
 script:
-  - coverage run --source=timezone_utils run_tests.py
-  - coverage report
-
-after_success: coveralls
-
+- tox -e "${TOX_ENV}"
 notifications:
   email: false
-
-matrix:
-  exclude:
-    # https://docs.djangoproject.com/en/dev/releases/1.9/#python-compatibility
-    # Django 1.9 requires Python 2.7, 3.4, or 3.5
-    - python: "3.2"
-      env: DJANGO="django>=1.9,<1.10"
-    - python: "3.3"
-      env: DJANGO="django>=1.9,<1.10"
-    # https://docs.djangoproject.com/en/dev/releases/1.10/#python-compatibility
-    # Django 1.10 requires Python 2.7, 3.4, or 3.5
-    - python: "3.2"
-      env: DJANGO="django>=1.10,<1.11"
-    - python: "3.3"
-      env: DJANGO="django>=1.10,<1.11"
-    # https://docs.djangoproject.com/en/dev/releases/1.11/#python-compatibility
-    # Django 1.11 requires Python 2.7, 3.4, or 3.5.
-    # The Django 1.11.x series is the last to support Python 2.
-    # The next major release, Django 2.0, will only support Python 3.5+
-    - python: "2.7"
-      env: DJANGO="django>=2.0,<2.1"
-    - python: "3.2"
-      env: DJANGO="django>=2.0,<2.1"
-    - python: "3.3"
-      env: DJANGO="django>=2.0,<2.1"
-    - python: "3.2"
-      env: DJANGO="https://github.com/django/django/archive/master.tar.gz"
-    - python: "3.3"
-      env: DJANGO="https://github.com/django/django/archive/master.tar.gz"
-  allow_failures:
-    - env: DJANGO="https://github.com/django/django/archive/master.tar.gz"
-    - python: "nightly"
-  fast_finish: true
