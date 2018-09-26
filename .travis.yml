@@ -49,5 +49,15 @@ install:
 - pip install -U pip setuptools tox wheel
 script:
 - tox -e "${TOX_ENV}"
+deploy:
+  provider: pypi
+  user: Surgo
+  password:
+    secure: ECQgP3QvjNyqe7sqeKMHOu4wAAvuDobweIGfHXMuWmLer7FKJeCb0HhuSNzZjXXCdTiE1km7dSaYU1Uvb0aA8Zi29oOS0oR4qPVKFibNSqnWrc8WnPhvSCnK9cT6CtwSpK48KYqENHfKbr1SAR2vTX8J3NhwRqBB0aS6bCYEKWU=
+  distributions: sdist bdist_wheel
+  on:
+    repo: michaeljohnbarr/django-timezone-utils
+    tags: true
+    condition: "$TOX_ENV = py37-dj21"
 notifications:
   email: false
