@@ -109,6 +109,7 @@ Contributors
 
 Changelog
 ---------
+- 0.14.0 Add support for Django 2.2, 3.0. Drop support for Django 2.0, 2.1.
 - 0.13 Fixed error for Python 3 on PyPi.
 - 0.12 Add support for Django 2.1. Support Python 3.7. Drop support for Django 1.8.
 - 0.11 Removed reference to django.db.models.fields.subclassing.SubfieldBase, which means that only Django 1.8+ is now supported. Removed support for Python versions < 2.6. The Django 1.6 series was the last to support Python 2.6. Added testing support for Django 1.10. Changed development status from Beta to Production/Stable.
