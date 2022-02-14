@@ -37,6 +37,10 @@ matrix:
     python: 3.7
   - env: TOX_ENV=py38-djmaster
     python: 3.8
+  - env: TOX_ENV=py39-djmaster
+    python: 3.9
+  - env: TOX_ENV=py310-djmaster
+    python: 3.10
   allow_failures:
   - env: TOX_ENV=py36-djmaster
   - env: TOX_ENV=py37-djmaster

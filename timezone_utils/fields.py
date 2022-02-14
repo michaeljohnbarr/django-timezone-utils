@@ -13,7 +13,7 @@ from django.core import checks
 from django.core.exceptions import ValidationError
 from django.db.models.fields import DateTimeField, CharField
 from django.utils.timezone import get_default_timezone, is_naive, make_aware
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
 # App
 from timezone_utils import forms
