@@ -7,16 +7,6 @@ cache:
 matrix:
   fast_finish: true
   include:
-  - env: TOX_ENV=py27-dj111
-    python: 2.7
-  - env: TOX_ENV=py34-dj111
-    python: 3.4
-  - env: TOX_ENV=py35-dj111
-    python: 3.5
-  - env: TOX_ENV=py36-dj111
-    python: 3.6
-  - env: TOX_ENV=py37-dj111
-    python: 3.7
   - env: TOX_ENV=py35-dj22
     python: 3.5
   - env: TOX_ENV=py36-dj22
@@ -25,16 +15,20 @@ matrix:
     python: 3.7
   - env: TOX_ENV=py38-dj22
     python: 3.8
-  - env: TOX_ENV=py36-dj30
-    python: 3.6
-  - env: TOX_ENV=py37-dj30
-    python: 3.7
+  - env: TOX_ENV=py39-dj22
+    python: 3.9
   - env: TOX_ENV=py38-dj30
     python: 3.8
-  - env: TOX_ENV=py36-djmaster
-    python: 3.6
-  - env: TOX_ENV=py37-djmaster
-    python: 3.7
+  - env: TOX_ENV=py39-dj30
+    python: 3.9
+  - env: TOX_ENV=py310-dj30
+    python: 3.10
+  - env: TOX_ENV=py38-dj40
+    python: 3.8
+  - env: TOX_ENV=py39-dj40
+    python: 3.9
+  - env: TOX_ENV=py310-dj40
+    python: 3.10
   - env: TOX_ENV=py38-djmaster
     python: 3.8
   - env: TOX_ENV=py39-djmaster
@@ -42,9 +36,9 @@ matrix:
   - env: TOX_ENV=py310-djmaster
     python: 3.10
   allow_failures:
-  - env: TOX_ENV=py36-djmaster
-  - env: TOX_ENV=py37-djmaster
   - env: TOX_ENV=py38-djmaster
+  - env: TOX_ENV=py39-djmaster
+  - env: TOX_ENV=py310-djmaster
 install:
 - pip install -U pip setuptools tox wheel
 script:

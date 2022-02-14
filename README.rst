@@ -109,6 +109,7 @@ Contributors
 
 Changelog
 ---------
+- 0.15.0 Add support for Django 4.0. Drop support for Django 1.11.
 - 0.14.0 Add support for Django 2.2, 3.0. Drop support for Django 2.0, 2.1.
 - 0.13 Fixed error for Python 3 on PyPi.
 - 0.12 Add support for Django 2.1. Support Python 3.7. Drop support for Django 1.8.
