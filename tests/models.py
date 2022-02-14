@@ -27,6 +27,7 @@ class TZWithLowMaxLength(models.Model):
     maximum length of the longest value provided by pytz.all_timezones.
 
     """
+    id = models.AutoField(primary_key=True)
     timezone = TimeZoneField(
         max_length=15,
         null=True,
@@ -35,6 +36,7 @@ class TZWithLowMaxLength(models.Model):
 
 class TZWithBadStringDefault(models.Model):
     """Test should check that a ValidationError is raised when..."""
+    id = models.AutoField(primary_key=True)
     timezone = TimeZoneField(
         default='Bad/Worse',
         max_length=64,
@@ -43,6 +45,7 @@ class TZWithBadStringDefault(models.Model):
 
 
 class ModelWithBadTimeOverride(models.Model):
+    id = models.AutoField(primary_key=True)
     timestamp = LinkedTZDateTimeField(
         default=settings.TEST_DATETIME,
         time_override='<invalid>',
@@ -50,6 +53,7 @@ class ModelWithBadTimeOverride(models.Model):
 
 
 class ModelWithBadPopulateFrom(models.Model):
+    id = models.AutoField(primary_key=True)
     timezone = TimeZoneField(default='US/Eastern')
     timestamp = LinkedTZDateTimeField(
         default=settings.TEST_DATETIME,
@@ -58,6 +62,7 @@ class ModelWithBadPopulateFrom(models.Model):
 
 
 class ModelWithBadTimeZoneCharField(models.Model):
+    id = models.AutoField(primary_key=True)
     timezone = models.CharField(default='Bad/Worse', max_length=64)
     timestamp = LinkedTZDateTimeField(
         default=settings.TEST_DATETIME,
@@ -66,6 +71,7 @@ class ModelWithBadTimeZoneCharField(models.Model):
 
 
 class LocationTimeZone(models.Model):
+    id = models.AutoField(primary_key=True)
     timezone = TimeZoneField(
         verbose_name=_('timezone'),
         max_length=64,
@@ -75,6 +81,7 @@ class LocationTimeZone(models.Model):
 
 
 class LocationTimeZoneChoices(models.Model):
+    id = models.AutoField(primary_key=True)
     timezone = TimeZoneField(
         verbose_name=_('timezone'),
         max_length=64,
@@ -85,6 +92,7 @@ class LocationTimeZoneChoices(models.Model):
 
 
 class LocationTimeZoneChoicesWithEmpty(models.Model):
+    id = models.AutoField(primary_key=True)
     timezone = TimeZoneField(
         verbose_name=_('timezone'),
         max_length=64,
@@ -95,6 +103,7 @@ class LocationTimeZoneChoicesWithEmpty(models.Model):
 
 
 class LocationTimeZoneBadChoices(models.Model):
+    id = models.AutoField(primary_key=True)
     timezone = TimeZoneField(
         verbose_name=_('timezone'),
         max_length=64,
@@ -105,6 +114,7 @@ class LocationTimeZoneBadChoices(models.Model):
 
 
 class TZWithGoodStringDefault(models.Model):
+    id = models.AutoField(primary_key=True)
     """Test should validate that"""
     timezone = TimeZoneField(
         default='US/Eastern',
@@ -114,6 +124,7 @@ class TZWithGoodStringDefault(models.Model):
 
 
 class TZWithGoodTZInfoDefault(models.Model):
+    id = models.AutoField(primary_key=True)
     timezone = TimeZoneField(
         default=pytz.timezone('US/Pacific'),
         max_length=64,
@@ -122,18 +133,21 @@ class TZWithGoodTZInfoDefault(models.Model):
 
 
 class ModelWithDateTimeOnly(models.Model):
+    id = models.AutoField(primary_key=True)
     timestamp = LinkedTZDateTimeField(
         default=settings.TEST_DATETIME,
     )
 
 
 class NullModelWithDateTimeOnly(models.Model):
+    id = models.AutoField(primary_key=True)
     timestamp = LinkedTZDateTimeField(
         null=True,
     )
 
 
 class CallableTimeStampedModel(models.Model):
+    id = models.AutoField(primary_key=True)
     start = LinkedTZDateTimeField(
         default=settings.TEST_DATETIME,
         time_override=datetime.min.time
@@ -145,6 +159,7 @@ class CallableTimeStampedModel(models.Model):
 
 
 class StaticTimeStampedModel(models.Model):
+    id = models.AutoField(primary_key=True)
     start = LinkedTZDateTimeField(
         default=settings.TEST_DATETIME,
         time_override=datetime_time(0, 0)
@@ -160,6 +175,7 @@ def get_other_model_timezone(obj):
 
 
 class ModelWithForeignKeyToTimeZone(models.Model):
+    id = models.AutoField(primary_key=True)
     other_model = models.ForeignKey(
         to='tests.TZWithGoodStringDefault',
         related_name='fk_to_tz',
@@ -172,6 +188,7 @@ class ModelWithForeignKeyToTimeZone(models.Model):
 
 
 class ModelWithLocalTimeZone(models.Model):
+    id = models.AutoField(primary_key=True)
     timezone = TimeZoneField(default='US/Eastern')
     timestamp = LinkedTZDateTimeField(
         default=settings.TEST_DATETIME,
@@ -180,6 +197,7 @@ class ModelWithLocalTimeZone(models.Model):
 
 
 class ModelWithLocalTZCharField(models.Model):
+    id = models.AutoField(primary_key=True)
     timezone = models.CharField(default='US/Eastern', max_length=64)
     timestamp = LinkedTZDateTimeField(
         default=settings.TEST_DATETIME,
@@ -188,6 +206,7 @@ class ModelWithLocalTZCharField(models.Model):
 
 
 class TZTimeFramedModel(models.Model):
+    id = models.AutoField(primary_key=True)
     other_model = models.ForeignKey(
         to='tests.TZWithGoodStringDefault',
         related_name='fk_to_tz_too',
